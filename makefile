@@ -1,7 +1,7 @@
 CXX = clang++
-CXX_FLAGS = -std=c++2a -Wall -I.
+CXX_FLAGS = -std=c++2a -g -O0 -Wall -I.
 
-TARGETS := WorldData_Tests.cpp
+TARGETS := MDDChart_Tests.cpp
 SRCS = $(filter-out $(TARGETS), $(wildcard *.cpp))
 OBJS = $(patsubst %.cpp, obj/%.o, $(SRCS))
 EXE := $(patsubst %.cpp, %, $(TARGETS))
