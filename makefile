@@ -20,4 +20,4 @@ configure:
 	mkdir -p obj
 
 clean:
-	$(RM) obj/*.o *_exe
+	$(RM) -rf obj/*.o *_exe *.dSYM
