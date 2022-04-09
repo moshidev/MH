@@ -4,14 +4,15 @@
 #include <vector>
 #include "GreedyMDDSolver.hpp"
 #include "MDDChart.hpp"
+#include "MDDSolution.hpp"
 
 static bool correct_number_of_solutions(const MDDChart& chart) {
     GreedyMDDSolver solver{1, chart};
-    std::set<unsigned> s = solver.solve(chart.num_elements_to_be_chosen());
-    size_t solution_size = s.size();
+    MDDSolution s = solver.solve(chart.num_elements_to_be_chosen());
+    size_t solution_size = s.get_solution().size();
     size_t m = chart.num_elements_to_be_chosen();
-    for (auto a : s) {
-        std::cerr << a << ", ";
+    for (auto a : s.get_solution()) {
+        std::cerr << a.first << ", ";
     }
     std::cerr << std::endl;
     return solution_size == m;
@@ -19,10 +20,10 @@ static bool correct_number_of_solutions(const MDDChart& chart) {
 
 static bool correct_dispersion(const MDDChart& chart, unsigned dispersion) {
     GreedyMDDSolver solver{1, chart};
-    std::set<unsigned> s = solver.solve(chart.num_elements_to_be_chosen());
-    unsigned sdispersion = solver.calc_solution_dispersion(s);
+    MDDSolution s = solver.solve(chart.num_elements_to_be_chosen());
+    unsigned sdispersion = s.calc_dispersion();
     std::cerr << "Dispersion: " << sdispersion << std::endl;
-    return solver.calc_solution_dispersion(s) == dispersion;
+    return sdispersion == dispersion;
 }
 
 int main(int argn, char** argv) {
