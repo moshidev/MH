@@ -9,17 +9,16 @@ MDDChart::MDDChart(unsigned n, unsigned m, std::vector<int>&& v) noexcept
 :n{n}, m{m}, v{v}
 {   }
 
-MDDChart&& make_MDDChart(std::istream& is, unsigned res) noexcept {
+MDDChart make_MDDChart(std::istream& is, unsigned res) noexcept {
     unsigned n, m;
     std::vector<int> v;
     is >> n >> m;
 
     if (is) {
         v.resize(n*n);
-    }
-
-    for (int i = 0; i < n; i++) {
-        v[i*n+i] = 0;
+        for (int i = 0; i < n; i++) {
+            v[i*n+i] = 0;
+        }
     }
     
     while (is) {
@@ -37,5 +36,5 @@ MDDChart&& make_MDDChart(std::istream& is, unsigned res) noexcept {
         }
     }
 
-    return std::move(MDDChart(n, m, std::move(v)));
+    return MDDChart(n, m, v);
 }

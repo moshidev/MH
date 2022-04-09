@@ -21,6 +21,6 @@ public:
     inline int at(unsigned i, unsigned j) const noexcept { return v[i*n+j]; }
 };
 
-[[nodiscard]] MDDChart&& make_MDDChart(std::istream& is, unsigned res = 10'000) noexcept;
+[[nodiscard]] MDDChart make_MDDChart(std::istream& is, unsigned res = 10'000) noexcept;
 
 #endif /* MDD_CHART_HPP_ */
