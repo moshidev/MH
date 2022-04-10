@@ -15,7 +15,7 @@ static bool correct_number_of_solutions(const MDDChart& chart) {
         std::cerr << a.first << ", ";
     }
     std::cerr << std::endl;
-    return solution_size == m;
+    return solution_size == m && s.is_valid();
 }
 
 static bool correct_dispersion(const MDDChart& chart, unsigned dispersion) {

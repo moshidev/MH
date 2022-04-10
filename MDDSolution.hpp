@@ -23,7 +23,7 @@ public:
     void add_index_to_solution(index_t index) noexcept;
     void remove_index_from_solution(index_t index) noexcept;
 
-    inline bool is_valid(bool) const noexcept { return solution.size() == chart->num_elements_to_be_chosen(); }
+    inline bool is_valid(void) const noexcept { return solution.size() == chart->num_elements_to_be_chosen(); }
     inline const solution_t& get_solution(void) const noexcept { return solution; }
 };
 
