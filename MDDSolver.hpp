@@ -23,6 +23,7 @@ protected:
 
 public:
     inline const MDDChart& get_chart(void) const noexcept { return *chart; }
+    [[nodiscard]] virtual MDDSolution solve(unsigned number_of_elements_to_be_chosen) noexcept = 0;
 };
 
 #endif /* MDD_SOLVER_HPP_ */
