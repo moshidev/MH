@@ -11,7 +11,7 @@ MDDSolution::sum_to_other_indexes_in_solution_t GreedyMDDSolver::calc_vertex_can
     typedef MDDSolution::sum_to_other_indexes_in_solution_t sum_t;
     sum_t min = std::numeric_limits<sum_t>::max();
     sum_t max = std::numeric_limits<sum_t>::min();
-    sum_t distance_summatory_vs = solution.calc_distance_summatory_from_vertex_to_solution(v, *chart);
+    sum_t distance_summatory_vs = solution.distance_summatory_from_index_to_solution(v);
     max = std::max(max, distance_summatory_vs);
     min = std::min(min, distance_summatory_vs);
 
@@ -48,7 +48,7 @@ void GreedyMDDSolver::init_nonchosen(std::set<MDDSolution::index_t>& nonchosen) 
 }
 
 MDDSolution GreedyMDDSolver::solve(unsigned number_of_elements_to_be_chosen) noexcept {
-    MDDSolution solution;
+    MDDSolution solution{chart};
     std::set<MDDSolution::index_t> nonchosen;
     init_nonchosen(nonchosen);
 
@@ -60,7 +60,7 @@ MDDSolution GreedyMDDSolver::solve(unsigned number_of_elements_to_be_chosen) noe
         for (auto& v : solution.get_solution()) {
             solution.update(v.first, chart->at(element_chosen, v.first));
         }
-        solution.update(element_chosen, solution.calc_distance_summatory_from_vertex_to_solution(element_chosen, *chart));
+        solution.update(element_chosen, solution.distance_summatory_from_index_to_solution(element_chosen));
         nonchosen.erase(element_chosen);
     }
 

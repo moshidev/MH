@@ -2,10 +2,14 @@
 
 typedef MDDSolution::sum_to_other_indexes_in_solution_t sum_t;
 
-sum_t MDDSolution::calc_distance_summatory_from_vertex_to_solution(index_t v, const MDDChart& chart) const noexcept {
+MDDSolution::MDDSolution(const std::shared_ptr<const MDDChart>& c)
+:chart{c}
+{   }
+
+sum_t MDDSolution::distance_summatory_from_index_to_solution(index_t v) const noexcept {
     sum_t sum = 0;
     for (const auto& u : solution) {
-        sum += chart.at(v, u.first);
+        sum += chart->at(v, u.first);
     }
     return sum;
 }
