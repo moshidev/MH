@@ -4,16 +4,12 @@
 #include "GreedyMDDSolver.hpp"
 
 GreedyMDDSolver::GreedyMDDSolver(unsigned seed, const MDDChart& c)
-:chart{c}, rgenerator{seed}, udistribution{0, c.num_elements()-1}
+:MDDSolver{seed, c}
 {   }
 
 GreedyMDDSolver::GreedyMDDSolver(unsigned seed, MDDChart&& c)
-:chart{c}, rgenerator{seed}, udistribution{0, c.num_elements()-1}
+:MDDSolver{seed, c}
 {   }
-
-unsigned GreedyMDDSolver::select_random_element(void) noexcept {
-    return udistribution(rgenerator);
-}
 
 unsigned GreedyMDDSolver::calc_distance_summatory_from_vertex_to_solution(unsigned v, const MDDSolution& solution) const noexcept {
     unsigned long sum = 0;
@@ -66,7 +62,7 @@ MDDSolution GreedyMDDSolver::solve(unsigned number_of_elements_to_be_chosen) noe
     std::set<unsigned> nonchosen;
     init_nonchosen(nonchosen);
 
-    unsigned first_element = select_random_element();
+    unsigned first_element = choose_random(nonchosen);
     solution.update(first_element, 0);
     nonchosen.erase(first_element);
     while (--number_of_elements_to_be_chosen) {
