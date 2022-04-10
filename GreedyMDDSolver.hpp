@@ -8,7 +8,6 @@
 
 class GreedyMDDSolver : public MDDSolver {
 
-    unsigned calc_distance_summatory_from_vertex_to_solution(unsigned v, const MDDSolution& solution) const noexcept;
     unsigned calc_vertex_candidate_dispersion(unsigned v, const MDDSolution& solution) const noexcept;
     unsigned select_next_element(const MDDSolution& solution, const std::set<unsigned>& nonchosen) const noexcept;
     void init_nonchosen(std::set<unsigned>& nonchosen) noexcept;

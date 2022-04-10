@@ -11,18 +11,10 @@ GreedyMDDSolver::GreedyMDDSolver(unsigned seed, MDDChart&& c)
 :MDDSolver{seed, c}
 {   }
 
-unsigned GreedyMDDSolver::calc_distance_summatory_from_vertex_to_solution(unsigned v, const MDDSolution& solution) const noexcept {
-    unsigned long sum = 0;
-    for (const auto& u : solution.get_solution()) {
-        sum += chart.at(v, u.first);
-    }
-    return sum;
-}
-
 unsigned GreedyMDDSolver::calc_vertex_candidate_dispersion(unsigned v, const MDDSolution& solution) const noexcept {
     unsigned long min = std::numeric_limits<unsigned long>::max();
     unsigned long max = std::numeric_limits<unsigned long>::min();
-    unsigned long distance_summatory_vs = calc_distance_summatory_from_vertex_to_solution(v, solution);
+    unsigned long distance_summatory_vs = solution.calc_distance_summatory_from_vertex_to_solution(v, chart);
     max = std::max(max, distance_summatory_vs);
     min = std::min(min, distance_summatory_vs);
 
@@ -70,7 +62,7 @@ MDDSolution GreedyMDDSolver::solve(unsigned number_of_elements_to_be_chosen) noe
         for (auto& v : solution.get_solution()) {
             solution.update(v.first, chart.at(element_chosen, v.first));
         }
-        solution.update(element_chosen, calc_distance_summatory_from_vertex_to_solution(element_chosen, solution));
+        solution.update(element_chosen, solution.calc_distance_summatory_from_vertex_to_solution(element_chosen, chart));
         nonchosen.erase(element_chosen);
     }
 

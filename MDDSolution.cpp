@@ -1,5 +1,13 @@
 #include "MDDSolution.hpp"
 
+unsigned long MDDSolution::calc_distance_summatory_from_vertex_to_solution(unsigned v, const MDDChart& chart) const noexcept {
+    unsigned long sum = 0;
+    for (const auto& u : index_maps_distance_summatory) {
+        sum += chart.at(v, u.first);
+    }
+    return sum;
+}
+
 void MDDSolution::update(unsigned index, unsigned long sum) noexcept {
     if (index_maps_distance_summatory.find(index) == index_maps_distance_summatory.end()) {
         index_maps_distance_summatory.insert(std::pair<unsigned, unsigned long>(index, 0));
