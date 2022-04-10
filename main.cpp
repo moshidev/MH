@@ -7,6 +7,7 @@
 #include "MDDChart.hpp"
 #include "MDDSolution.hpp"
 #include "GreedyMDDSolver.hpp" 
+#include "LocalSearchMDDSolver.hpp" 
 
 int main(int argn, char** argv) {
 
@@ -17,6 +18,8 @@ int main(int argn, char** argv) {
         }
     }
 
+    std::cout << "Resultados del algoritmo Greedy:" << std::endl;
+
     for (const auto& path : data_files) {
         double elapsed_time = 0.0;
         std::cout << path;
@@ -25,6 +28,26 @@ int main(int argn, char** argv) {
         MDDChart chart{make_MDDChart(ifile)};
         for (unsigned i = 0; i < 10; i++) {
             GreedyMDDSolver solver{i, std::make_shared<const MDDChart>(chart)};
+            auto ini = std::chrono::high_resolution_clock::now();
+            MDDSolution solution {solver.solve(chart.num_elements_to_be_chosen())};
+            auto fin = std::chrono::high_resolution_clock::now();
+            elapsed_time += std::chrono::duration<double>(fin - ini).count();
+
+            std::cout << '\t' << ((double)solution.calc_dispersion()) / 10000;
+        }
+        std::cout << '\t' << elapsed_time/10 << "s" << std::endl;
+    }
+
+    std::cout << "Resultados del algoritmo de Búsqueda Local:" << std::endl;
+
+    for (const auto& path : data_files) {
+        double elapsed_time = 0.0;
+        std::cout << path;
+
+        std::fstream ifile{path.string(), std::ios_base::in};
+        MDDChart chart{make_MDDChart(ifile)};
+        for (unsigned i = 0; i < 10; i++) {
+            LocalSearchMDDSolver solver{i, std::make_shared<const MDDChart>(chart)};
             auto ini = std::chrono::high_resolution_clock::now();
             MDDSolution solution {solver.solve(chart.num_elements_to_be_chosen())};
             auto fin = std::chrono::high_resolution_clock::now();
