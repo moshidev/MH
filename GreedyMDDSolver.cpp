@@ -23,13 +23,6 @@ MDDSolution::index_t GreedyMDDSolver::select_next_element(const MDDSolution& sol
     return next_element;
 }
 
-void GreedyMDDSolver::init_nonchosen(std::set<MDDSolution::index_t>& nonchosen) noexcept {
-    nonchosen.clear();
-    for (int i = 0; i < chart->num_elements(); i++) {
-        nonchosen.insert(i);
-    }
-}
-
 MDDSolution GreedyMDDSolver::solve(unsigned number_of_elements_to_be_chosen) noexcept {
     MDDSolution solution{chart};
     std::set<MDDSolution::index_t> nonchosen;

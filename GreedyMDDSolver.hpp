@@ -8,7 +8,6 @@
 
 class GreedyMDDSolver : public MDDSolver {
     MDDSolution::index_t select_next_element(const MDDSolution& solution, const std::set<MDDSolution::index_t>& nonchosen) const noexcept;
-    void init_nonchosen(std::set<MDDSolution::index_t>& nonchosen) noexcept;
 
 public:
     GreedyMDDSolver() = delete;
