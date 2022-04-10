@@ -10,6 +10,8 @@ public:
     typedef unsigned index_t;
     typedef unsigned long sum_to_other_indexes_in_solution_t;
     typedef std::map<index_t,sum_to_other_indexes_in_solution_t> solution_t;
+
+private:
     solution_t solution;
     const std::shared_ptr<const MDDChart> chart;
 
