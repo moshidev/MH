@@ -8,9 +8,9 @@
 
 class GreedyMDDSolver : public MDDSolver {
 
-    unsigned calc_vertex_candidate_dispersion(unsigned v, const MDDSolution& solution) const noexcept;
-    unsigned select_next_element(const MDDSolution& solution, const std::set<unsigned>& nonchosen) const noexcept;
-    void init_nonchosen(std::set<unsigned>& nonchosen) noexcept;
+    MDDSolution::sum_to_other_indexes_in_solution_t calc_vertex_candidate_dispersion(MDDSolution::index_t v, const MDDSolution& solution) const noexcept;
+    MDDSolution::index_t select_next_element(const MDDSolution& solution, const std::set<MDDSolution::index_t>& nonchosen) const noexcept;
+    void init_nonchosen(std::set<MDDSolution::index_t>& nonchosen) noexcept;
 
 public:
     GreedyMDDSolver() = delete;

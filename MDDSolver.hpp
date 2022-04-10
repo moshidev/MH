@@ -3,6 +3,7 @@
 
 #include <set>
 #include <random>
+#include "MDDSolution.hpp"
 #include "MDDChart.hpp"
 
 class MDDSolver {
@@ -17,7 +18,7 @@ protected:
     MDDSolver(unsigned seed, const MDDChart& c);
     MDDSolver(unsigned seed, MDDChart&& c);
 
-    unsigned choose_random(const std::set<unsigned>& s) noexcept;
+    unsigned choose_random(const std::set<MDDSolution::index_t>& s) noexcept;
 
 public:
     inline const MDDChart& get_chart(void) const noexcept { return chart; }
