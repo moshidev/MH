@@ -48,3 +48,19 @@ unsigned MDDSolution::calc_dispersion(void) const noexcept {
 
     return max-min;
 }
+
+unsigned MDDSolution::calc_index_candidate_dispersion(index_t index) const noexcept {
+    sum_t min = std::numeric_limits<sum_t>::max();
+    sum_t max = std::numeric_limits<sum_t>::min();
+    sum_t distance_summatory_vs = distance_summatory_from_index_to_solution(index);
+    max = std::max(max, distance_summatory_vs);
+    min = std::min(min, distance_summatory_vs);
+
+    for (const auto& a : solution) {
+        sum_t sum = a.second + chart->at(index, a.first);
+        max = std::max(max, sum);
+        min = std::min(min, sum);
+    }
+
+    return max-min;
+}

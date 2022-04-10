@@ -21,6 +21,7 @@ public:
 
     sum_to_other_indexes_in_solution_t distance_summatory_from_index_to_solution(index_t v) const noexcept;
     unsigned calc_dispersion(void) const noexcept;
+    unsigned calc_index_candidate_dispersion(index_t index) const noexcept;
 
     void add_index_to_solution(index_t index) noexcept;
     void remove_index_from_solution(index_t index) noexcept;

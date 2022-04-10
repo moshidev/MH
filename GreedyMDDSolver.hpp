@@ -7,7 +7,6 @@
 #include "MDDSolution.hpp"
 
 class GreedyMDDSolver : public MDDSolver {
-    MDDSolution::sum_to_other_indexes_in_solution_t calc_vertex_candidate_dispersion(MDDSolution::index_t v, const MDDSolution& solution) const noexcept;
     MDDSolution::index_t select_next_element(const MDDSolution& solution, const std::set<MDDSolution::index_t>& nonchosen) const noexcept;
     void init_nonchosen(std::set<MDDSolution::index_t>& nonchosen) noexcept;
 
