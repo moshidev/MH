@@ -1,10 +1,6 @@
 #include "MDDSolver.hpp"
 
-MDDSolver::MDDSolver(unsigned seed, const MDDChart& c)
-:rgenerator{seed}, chart{c}
-{   }
-
-MDDSolver::MDDSolver(unsigned seed, MDDChart&& c)
+MDDSolver::MDDSolver(unsigned seed, const std::shared_ptr<const MDDChart>& c)
 :rgenerator{seed}, chart{c}
 {   }
 

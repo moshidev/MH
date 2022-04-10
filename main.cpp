@@ -24,7 +24,7 @@ int main(int argn, char** argv) {
         std::fstream ifile{path.string(), std::ios_base::in};
         MDDChart chart{make_MDDChart(ifile)};
         for (unsigned i = 0; i < 10; i++) {
-            GreedyMDDSolver solver{i, chart};
+            GreedyMDDSolver solver{i, std::make_shared<const MDDChart>(chart)};
             auto ini = std::chrono::high_resolution_clock::now();
             MDDSolution solution {solver.solve(chart.num_elements_to_be_chosen())};
             auto fin = std::chrono::high_resolution_clock::now();

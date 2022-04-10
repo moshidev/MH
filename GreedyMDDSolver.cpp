@@ -3,11 +3,7 @@
 #include <set>
 #include "GreedyMDDSolver.hpp"
 
-GreedyMDDSolver::GreedyMDDSolver(unsigned seed, const MDDChart& c)
-:MDDSolver{seed, c}
-{   }
-
-GreedyMDDSolver::GreedyMDDSolver(unsigned seed, MDDChart&& c)
+GreedyMDDSolver::GreedyMDDSolver(unsigned seed, const std::shared_ptr<const MDDChart>& c)
 :MDDSolver{seed, c}
 {   }
 
@@ -15,12 +11,12 @@ MDDSolution::sum_to_other_indexes_in_solution_t GreedyMDDSolver::calc_vertex_can
     typedef MDDSolution::sum_to_other_indexes_in_solution_t sum_t;
     sum_t min = std::numeric_limits<sum_t>::max();
     sum_t max = std::numeric_limits<sum_t>::min();
-    sum_t distance_summatory_vs = solution.calc_distance_summatory_from_vertex_to_solution(v, chart);
+    sum_t distance_summatory_vs = solution.calc_distance_summatory_from_vertex_to_solution(v, *chart);
     max = std::max(max, distance_summatory_vs);
     min = std::min(min, distance_summatory_vs);
 
     for (const auto& a : solution.get_solution()) {
-        sum_t sum = a.second + chart.at(v, a.first);
+        sum_t sum = a.second + chart->at(v, a.first);
         max = std::max(max, sum);
         min = std::min(min, sum);
     }
@@ -46,7 +42,7 @@ MDDSolution::index_t GreedyMDDSolver::select_next_element(const MDDSolution& sol
 
 void GreedyMDDSolver::init_nonchosen(std::set<MDDSolution::index_t>& nonchosen) noexcept {
     nonchosen.clear();
-    for (int i = 0; i < chart.num_elements(); i++) {
+    for (int i = 0; i < chart->num_elements(); i++) {
         nonchosen.insert(i);
     }
 }
@@ -62,9 +58,9 @@ MDDSolution GreedyMDDSolver::solve(unsigned number_of_elements_to_be_chosen) noe
     while (--number_of_elements_to_be_chosen) {
         MDDSolution::index_t element_chosen = select_next_element(solution, nonchosen);
         for (auto& v : solution.get_solution()) {
-            solution.update(v.first, chart.at(element_chosen, v.first));
+            solution.update(v.first, chart->at(element_chosen, v.first));
         }
-        solution.update(element_chosen, solution.calc_distance_summatory_from_vertex_to_solution(element_chosen, chart));
+        solution.update(element_chosen, solution.calc_distance_summatory_from_vertex_to_solution(element_chosen, *chart));
         nonchosen.erase(element_chosen);
     }
 

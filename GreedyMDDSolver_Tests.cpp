@@ -7,7 +7,7 @@
 #include "MDDSolution.hpp"
 
 static bool correct_number_of_solutions(const MDDChart& chart) {
-    GreedyMDDSolver solver{1, chart};
+    GreedyMDDSolver solver{1, std::make_shared<const MDDChart>(chart)};
     MDDSolution s = solver.solve(chart.num_elements_to_be_chosen());
     size_t solution_size = s.get_solution().size();
     size_t m = chart.num_elements_to_be_chosen();
@@ -19,7 +19,7 @@ static bool correct_number_of_solutions(const MDDChart& chart) {
 }
 
 static bool correct_dispersion(const MDDChart& chart, unsigned dispersion) {
-    GreedyMDDSolver solver{1, chart};
+    GreedyMDDSolver solver{1, std::make_shared<const MDDChart>(chart)};
     MDDSolution s = solver.solve(chart.num_elements_to_be_chosen());
     unsigned sdispersion = s.calc_dispersion();
     std::cerr << "Dispersion: " << sdispersion << std::endl;
