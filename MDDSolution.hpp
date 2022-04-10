@@ -13,7 +13,11 @@ public:
 
 private:
     solution_t solution;
+    sum_to_other_indexes_in_solution_t maximum;
+    sum_to_other_indexes_in_solution_t minimum;
     const std::shared_ptr<const MDDChart> chart;
+
+    void update_maximum_and_minimum(void);
 
 public:
     MDDSolution() = delete;

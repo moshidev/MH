@@ -3,7 +3,7 @@
 typedef MDDSolution::sum_to_other_indexes_in_solution_t sum_t;
 
 MDDSolution::MDDSolution(const std::shared_ptr<const MDDChart>& c)
-:chart{c}
+:maximum{0}, minimum{0}, chart{c}
 {   }
 
 sum_t MDDSolution::distance_summatory_from_index_to_solution(index_t v) const noexcept {
@@ -12,6 +12,23 @@ sum_t MDDSolution::distance_summatory_from_index_to_solution(index_t v) const no
         sum += chart->at(v, u.first);
     }
     return sum;
+}
+
+void MDDSolution::update_maximum_and_minimum(void) {
+    if (solution.empty()) {
+        maximum = 0;
+        minimum = 0;
+        return;
+    }
+
+    sum_t max = std::numeric_limits<sum_t>::min();
+    sum_t min = std::numeric_limits<sum_t>::max();
+    for (const auto& e : solution) {
+        max = std::max(max, e.second);
+        min = std::min(min, e.second);
+    }
+    maximum = max;
+    minimum = min;
 }
 
 void MDDSolution::add_index_to_solution(index_t index) noexcept {
@@ -23,6 +40,7 @@ void MDDSolution::add_index_to_solution(index_t index) noexcept {
         e.second += chart->at(index, e.first);
     }
     solution.emplace(index, distance_summatory_from_index_to_solution(index));
+    update_maximum_and_minimum();
 }
 
 void MDDSolution::remove_index_from_solution(index_t index) noexcept {
@@ -34,19 +52,11 @@ void MDDSolution::remove_index_from_solution(index_t index) noexcept {
         e.second -= chart->at(index, e.first);
     }
     solution.erase(index);
+    update_maximum_and_minimum();
 }
 
 unsigned MDDSolution::calc_dispersion(void) const noexcept {
-    sum_t min = std::numeric_limits<unsigned>::max();
-    sum_t max = std::numeric_limits<unsigned>::min();
-
-    for (const auto& a : solution) {
-        sum_t sum = a.second;
-        max = std::max(max, sum);
-        min = std::min(min, sum);
-    }
-
-    return max-min;
+    return maximum-minimum;
 }
 
 unsigned MDDSolution::calc_index_candidate_dispersion(index_t index) const noexcept {
