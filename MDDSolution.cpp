@@ -14,11 +14,26 @@ sum_t MDDSolution::distance_summatory_from_index_to_solution(index_t v) const no
     return sum;
 }
 
-void MDDSolution::update(index_t index, sum_t sum) noexcept {
-    if (solution.find(index) == solution.end()) {
-        solution.insert(std::pair<index_t, sum_t>(index, 0));
+void MDDSolution::add_index_to_solution(index_t index) noexcept {
+    if (solution.find(index) != solution.end()) {
+        return;
     }
-    solution.at(index) += sum;
+
+    for (auto& e : solution) {
+        e.second += chart->at(index, e.first);
+    }
+    solution.emplace(index, distance_summatory_from_index_to_solution(index));
+}
+
+void MDDSolution::remove_index_from_solution(index_t index) noexcept {
+    if (solution.find(index) == solution.end()) {
+        return;
+    }
+
+    for (auto& e : solution) {
+        e.second -= chart->at(index, e.first);
+    }
+    solution.erase(index);
 }
 
 unsigned MDDSolution::calc_dispersion(void) const noexcept {

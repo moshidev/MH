@@ -53,14 +53,11 @@ MDDSolution GreedyMDDSolver::solve(unsigned number_of_elements_to_be_chosen) noe
     init_nonchosen(nonchosen);
 
     MDDSolution::index_t first_element = choose_random(nonchosen);
-    solution.update(first_element, 0);
+    solution.add_index_to_solution(first_element);
     nonchosen.erase(first_element);
     while (--number_of_elements_to_be_chosen) {
         MDDSolution::index_t element_chosen = select_next_element(solution, nonchosen);
-        for (auto& v : solution.get_solution()) {
-            solution.update(v.first, chart->at(element_chosen, v.first));
-        }
-        solution.update(element_chosen, solution.distance_summatory_from_index_to_solution(element_chosen));
+        solution.add_index_to_solution(element_chosen);
         nonchosen.erase(element_chosen);
     }
 

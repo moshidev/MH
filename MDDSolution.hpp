@@ -20,11 +20,11 @@ public:
     sum_to_other_indexes_in_solution_t distance_summatory_from_index_to_solution(index_t v) const noexcept;
     unsigned calc_dispersion(void) const noexcept;
 
-    void update(index_t index, sum_to_other_indexes_in_solution_t sum) noexcept;
+    void add_index_to_solution(index_t index) noexcept;
+    void remove_index_from_solution(index_t index) noexcept;
 
     inline bool is_valid(bool) const noexcept { return solution.size() == chart->num_elements_to_be_chosen(); }
     inline const solution_t& get_solution(void) const noexcept { return solution; }
-    
 };
 
 #endif /* MDD_SOLUTION_HPP_ */
