@@ -14,7 +14,7 @@ void LocalSearchMDDSolver::populate_randomly(MDDSolution& solution, std::set<MDD
     }
 }
 
-MDDChart::index_t LocalSearchMDDSolver::best_neighbour_from_index(MDDChart::index_t index, const MDDSolution& solution, const std::set<MDDChart::index_t>& nonchosen) const noexcept {
+MDDChart::index_t LocalSearchMDDSolver::best_first_neighbour_from_index(MDDChart::index_t index, const MDDSolution& solution, const std::set<MDDChart::index_t>& nonchosen) const noexcept {
     typedef MDDSolution::sum_to_other_indexes_in_solution_t sum_t;
     typedef MDDSolution::index_t index_t;
     MDDSolution s_tmp{solution};
@@ -25,8 +25,8 @@ MDDChart::index_t LocalSearchMDDSolver::best_neighbour_from_index(MDDChart::inde
     for (const auto& a : nonchosen) {
         sum_t dispersion = s_tmp.calc_index_candidate_dispersion(a);
         if (dispersion < best_index_dispersion) {
-            return best_index;
             best_index = a;
+            return best_index;
         }
     }
 
@@ -47,7 +47,7 @@ MDDSolution LocalSearchMDDSolver::solve(unsigned number_of_elements_to_be_chosen
         MDDSolution s_tmp{solution};
         dispersion = best_dispersion;
         for (const auto& a : s_tmp.get_solution()) {
-            MDDSolution::index_t new_index = best_neighbour_from_index(a.first, solution, nonchosen);
+            MDDSolution::index_t new_index = best_first_neighbour_from_index(a.first, solution, nonchosen);
             nonchosen.insert(a.first);
             nonchosen.erase(new_index);
             solution.remove_index_from_solution(a.first);
