@@ -1,6 +1,9 @@
 {
-    "makefile.extensionOutputFolder": "./.vscode",
     "files.associations": {
+        "ios": "cpp",
+        "vector": "cpp",
+        "iosfwd": "cpp",
+        "random": "cpp",
         "__bit_reference": "cpp",
         "__bits": "cpp",
         "__config": "cpp",
@@ -43,13 +46,10 @@
         "fstream": "cpp",
         "initializer_list": "cpp",
         "iomanip": "cpp",
-        "ios": "cpp",
-        "iosfwd": "cpp",
         "iostream": "cpp",
         "istream": "cpp",
         "limits": "cpp",
         "locale": "cpp",
-        "map": "cpp",
         "memory": "cpp",
         "mutex": "cpp",
         "new": "cpp",
@@ -58,7 +58,6 @@
         "optional": "cpp",
         "ostream": "cpp",
         "queue": "cpp",
-        "random": "cpp",
         "ratio": "cpp",
         "semaphore": "cpp",
         "set": "cpp",
@@ -75,7 +74,6 @@
         "typeinfo": "cpp",
         "unordered_map": "cpp",
         "variant": "cpp",
-        "vector": "cpp",
         "__functional_base": "cpp",
         "algorithm": "cpp",
         "functional": "cpp",
@@ -84,6 +82,16 @@
         "*.tcc": "cpp",
         "memory_resource": "cpp",
         "stop_token": "cpp",
-        "cinttypes": "cpp"
-    }
+        "cinttypes": "cpp",
+        "filesystem": "cpp",
+        "map": "cpp"
+    },
+    "C_Cpp.default.configurationProvider": "ms-vscode.makefile-tools",
+    "makefile.launchConfigurations": [
+        {
+            "cwd": "/Users/daniel/MH",
+            "binaryPath": "/Users/daniel/MH/WorldData_Tests_exe",
+            "binaryArgs": []
+        }
+    ]
 }
