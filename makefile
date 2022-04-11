@@ -1,7 +1,7 @@
 CXX = clang++
 CXX_FLAGS = -std=c++2a -g -Og -Wall -I.
 
-TARGETS := main.cpp MDDChart_Tests.cpp GreedyMDDSolver_Tests.cpp LocalSearchMDDSolver_Tests.cpp LocalSearchMDDSolver_Tests.cpp 
+TARGETS := main.cpp MDDChart_Tests.cpp GreedyMDDSolver_Tests.cpp LocalSearchMDDSolver_Tests.cpp
 EXCLUDE := 
 SRCS = $(filter-out $(TARGETS) $(EXCLUDE), $(wildcard *.cpp))
 OBJS = $(patsubst %.cpp, obj/%.o, $(SRCS))
