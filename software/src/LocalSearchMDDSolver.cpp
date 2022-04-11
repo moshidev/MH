@@ -7,7 +7,7 @@ LocalSearchMDDSolver::LocalSearchMDDSolver(unsigned seed, const std::shared_ptr<
 {   }
 
 void LocalSearchMDDSolver::populate_randomly(MDDSolution& solution, std::set<MDDChart::index_t>& nonchosen, unsigned number_of_elements_to_be_chosen) noexcept {
-    for (int i = 0; i < number_of_elements_to_be_chosen; i++) {
+    for (unsigned i = 0; i < number_of_elements_to_be_chosen; i++) {
         MDDChart::index_t selected = choose_random(nonchosen);
         nonchosen.erase(selected);
         solution.add_index_to_solution(selected);
