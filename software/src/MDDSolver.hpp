@@ -22,6 +22,7 @@ protected:
     unsigned choose_random(const std::set<MDDSolution::index_t>& s) noexcept;
 
 public:
+    virtual ~MDDSolver() {}
     inline const MDDChart& get_chart(void) const noexcept { return *chart; }
     [[nodiscard]] virtual MDDSolution solve(unsigned number_of_elements_to_be_chosen) noexcept = 0;
 };
