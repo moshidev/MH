@@ -10,21 +10,7 @@
 #include "LocalSearchMDDSolver.hpp" 
 
 template<typename _T>
-static std::vector<_T> read_comma_separated(std::string str) {
-    std::replace(str.begin(), str.end(), ',', ' ');
-    std::stringstream sstream{str};
-    std::vector<_T> ret;
-
-    while (sstream) {
-        _T val;
-        sstream >> val;
-        if (sstream) {
-            ret.push_back(val);
-        }
-    }
-    
-    return ret;
-}
+static std::vector<_T> read_list(std::string str, char delimiter);
 
 int main(int argn, char** argv) {
     if (argn != 4) {
@@ -37,4 +23,21 @@ int main(int argn, char** argv) {
     }
 
     return 0;
+}
+
+template<typename _T>
+static std::vector<_T> read_list(std::string str, char delimiter) {
+    std::replace(str.begin(), str.end(), delimiter, ' ');
+    std::stringstream sstream{str};
+    std::vector<_T> ret;
+
+    while (sstream) {
+        _T val;
+        sstream >> val;
+        if (sstream) {
+            ret.push_back(val);
+        }
+    }
+    
+    return ret;
 }
