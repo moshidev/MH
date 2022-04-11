@@ -13,7 +13,7 @@ MDDChart make_MDDChart(std::istream& is, unsigned res) noexcept {
     unsigned n, m;
     std::vector<MDDChart::index_t> v;
     is >> n >> m;
-
+    
     if (is) {
         v.resize(n*n);
         for (unsigned i = 0; i < n; i++) {
@@ -21,6 +21,8 @@ MDDChart make_MDDChart(std::istream& is, unsigned res) noexcept {
         }
     }
     
+    unsigned n_lineas = (n*(n-1))/2;
+    unsigned n_lineas_leidas = 0;
     while (is) {
         unsigned i, j;
         double dval;
@@ -33,7 +35,12 @@ MDDChart make_MDDChart(std::istream& is, unsigned res) noexcept {
             unsigned ival = dval*res;
             v[i*n+j] = ival;
             v[j*n+i] = ival;
+            n_lineas_leidas++;
         }
+    }
+
+    if (n_lineas_leidas != n_lineas) {
+        is.setstate(std::ios_base::failbit);
     }
 
     return MDDChart(n, m, v);

@@ -30,6 +30,6 @@ int main(int argn, char** argv) {
     assert(make_chart("data/GKD-b_1_n25_m2.txt"));
     assert(read_chart("data/GKD-b_50_n150_m45.txt", 150, 45));
     
-    std::cout << "All WorldData_Tests passed!" << std::endl;
+    std::cout << "All MDDChart_Tests passed!" << std::endl;
     return 0;
 }
