@@ -13,7 +13,7 @@
 template<typename _T>
 static std::vector<_T> read_list(std::string str, char delimiter);
 
-static std::vector<std::shared_ptr<MDDChart>> read_charts(const std::vector<std::string>& v, unsigned resolution);
+static std::vector<std::pair<std::string,std::shared_ptr<MDDChart>>> read_charts(const std::vector<std::string>& v, unsigned resolution);
 
 int main(int argn, char** argv) {
     if (argn != 4) {
@@ -50,14 +50,14 @@ static std::vector<_T> read_list(std::string str, char delimiter) {
     return ret;
 }
 
-static std::vector<std::shared_ptr<MDDChart>> read_charts(const std::vector<std::string>& v, unsigned resolution) {
-    std::vector<std::shared_ptr<MDDChart>> charts;
+static std::vector<std::pair<std::string,std::shared_ptr<MDDChart>>> read_charts(const std::vector<std::string>& v, unsigned resolution) {
+    std::vector<std::pair<std::string,std::shared_ptr<MDDChart>>> charts;
 
     for (const auto& e : v) {
         std::fstream file{e};
         MDDChart chart{make_MDDChart(file, resolution)};
         if (!file.bad()) {
-            charts.push_back(std::make_unique<MDDChart>(chart));
+            charts.emplace_back(e, std::make_shared<MDDChart>(chart));
         }
         else {
             std::cerr << "Invalid data file " << e << std::endl;
