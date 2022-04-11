@@ -25,10 +25,45 @@ int main(int argn, char** argv) {
         return 1;
     }
 
+    std::string tipo_algoritmo{argv[1]};
+    std::transform(tipo_algoritmo.begin(), tipo_algoritmo.end(), tipo_algoritmo.begin(), [](char c){ return std::tolower(c); });
+    if (tipo_algoritmo != "greedy" && tipo_algoritmo != "localsearch") {
+        std::cerr << "Tipo de algoritmo desconocido." << std::endl;
+        return 1;
+    }
+
     char delimiter = ',';
+    unsigned resolution = 100'000;
     auto seeds = read_list<int>(argv[2], delimiter);
     auto files = read_list<std::string>(argv[3], delimiter);
-    auto charts = read_charts(files, 100'000);
+    auto charts = read_charts(files, resolution);
+
+    if (seeds.empty() || files.empty()) {
+        std::cerr << "Abortamos, no hay ni semillas ni ficheros..." << std::endl;
+        return 2;
+    }
+
+    for (const auto& c : charts) {
+        std::cout << c.first;
+
+        double elapsed_time = 0.0;
+        for (const auto& s : seeds) {
+            std::unique_ptr<MDDSolver> solver;
+            if (tipo_algoritmo == "greedy") {
+                solver = std::make_unique<GreedyMDDSolver>(s, c.second);
+            }
+            else if (tipo_algoritmo == "localsearch") {
+                solver = std::make_unique<LocalSearchMDDSolver>(s, c.second);
+            }
+            auto ini = std::chrono::high_resolution_clock::now();
+            auto solution = solver->solve(c.second->num_elements_to_be_chosen());
+            auto fin = std::chrono::high_resolution_clock::now();
+            elapsed_time += std::chrono::duration<double>(fin - ini).count();
+            std::cout << '\t' << solution.calc_dispersion()/resolution;
+        }
+        
+        std::cout << '\t' << elapsed_time/seeds.size() << '\n';
+    }
 
     return 0;
 }
