@@ -10,8 +10,8 @@
 #include "LocalSearchMDDSolver.hpp" 
 
 template<typename _T>
-static std::vector<_T> read_comma_separated(std::string str) {
-    std::replace(str.begin(), str.end(), ',', ' ');
+static std::vector<_T> read_list(std::string str, char delimiter) {
+    std::replace(str.begin(), str.end(), delimiter, ' ');
     std::stringstream sstream{str};
     std::vector<_T> ret;
 
