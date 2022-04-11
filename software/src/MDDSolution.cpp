@@ -1,3 +1,4 @@
+#include <limits>
 #include "MDDSolution.hpp"
 
 typedef MDDSolution::sum_to_other_indexes_in_solution_t sum_t;
