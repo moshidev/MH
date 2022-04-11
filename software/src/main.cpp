@@ -4,6 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <memory>
 #include "MDDChart.hpp"
 #include "MDDSolution.hpp"
 #include "GreedyMDDSolver.hpp" 
@@ -11,6 +12,8 @@
 
 template<typename _T>
 static std::vector<_T> read_list(std::string str, char delimiter);
+
+static std::vector<std::shared_ptr<MDDChart>> read_charts(const std::vector<std::string>& v, unsigned resolution);
 
 int main(int argn, char** argv) {
     if (argn != 4) {
@@ -21,6 +24,11 @@ int main(int argn, char** argv) {
         std::cerr << "\t[ficheros] es una lista de ficheros separados por comas\n";
         return 1;
     }
+
+    char delimiter = ',';
+    auto seeds = read_list<int>(argv[2], delimiter);
+    auto files = read_list<std::string>(argv[3], delimiter);
+    auto charts = read_charts(files, 100'000);
 
     return 0;
 }
@@ -40,4 +48,21 @@ static std::vector<_T> read_list(std::string str, char delimiter) {
     }
     
     return ret;
+}
+
+static std::vector<std::shared_ptr<MDDChart>> read_charts(const std::vector<std::string>& v, unsigned resolution) {
+    std::vector<std::shared_ptr<MDDChart>> charts;
+
+    for (const auto& e : v) {
+        std::fstream file{e};
+        MDDChart chart{make_MDDChart(file, resolution)};
+        if (!file.bad()) {
+            charts.push_back(std::make_unique<MDDChart>(chart));
+        }
+        else {
+            std::cerr << "Invalid data file " << e << std::endl;
+        }
+    }
+
+    return charts;
 }
