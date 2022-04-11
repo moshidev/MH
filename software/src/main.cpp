@@ -60,7 +60,7 @@ int main(int argn, char** argv) {
             auto solution = solver->solve(c.second->num_elements_to_be_chosen());
             auto fin = std::chrono::high_resolution_clock::now();
             elapsed_time += std::chrono::duration<double>(fin - ini).count();
-            std::cout << '\t' << solution.calc_dispersion()/resolution;
+            std::cout << '\t' << (double)solution.calc_dispersion()/resolution;
         }
         
         std::cout << '\t' << elapsed_time/seeds.size() << '\n';
