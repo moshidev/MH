@@ -1,60 +1,44 @@
+#include <vector>
 #include <string>
 #include <chrono>
 #include <iostream>
 #include <fstream>
-#include <filesystem>
-#include <set>
 #include "MDDChart.hpp"
 #include "MDDSolution.hpp"
 #include "GreedyMDDSolver.hpp" 
 #include "LocalSearchMDDSolver.hpp" 
 
+static std::vector<int> lee_semillas(const std::string& str) {
+    std::vector<int> semillas;
+    int num = 0;
+    for (const auto& c : str) {
+        if (c == ',') {
+            semillas.push_back(num);
+            num = 0;
+        }
+        else {
+            num = num*10 + c-'0';
+        }
+    }
+    semillas.push_back(num);
+    return semillas;
+}
+
 int main(int argn, char** argv) {
-
-    std::set<std::filesystem::path> data_files;
-    for (const auto& f : std::filesystem::directory_iterator("data")) {
-        if (f.is_regular_file()) {
-            data_files.insert(f.path());
-        }
+    if (argn != 4) {
+        std::cerr << "Utilización incorrecta. Invocar como " << argv[0] << " [tipo algoritmo] [semillas] [ficheros]\n";
+        std::cerr << "Dónde:\n";
+        std::cerr << "\t[tipo algoritmo] puede ser \"Greedy\" o \"LocalSearch\"\n";
+        std::cerr << "\t[semilla] es una lista de semillas separada por comas (por ejemplo \"10,40,50,60,80\")\n";
+        std::cerr << "\t[ficheros] es una lista de ficheros separados por comas\n";
+        return 1;
     }
 
-    std::cout << "Resultados del algoritmo Greedy:" << std::endl;
+    std::vector<int> s = lee_semillas(std::string(argv[2]));
 
-    for (const auto& path : data_files) {
-        double elapsed_time = 0.0;
-        std::cout << path;
-
-        std::fstream ifile{path.string(), std::ios_base::in};
-        MDDChart chart{make_MDDChart(ifile)};
-        for (unsigned i = 0; i < 10; i++) {
-            GreedyMDDSolver solver{i, std::make_shared<const MDDChart>(chart)};
-            auto ini = std::chrono::high_resolution_clock::now();
-            MDDSolution solution {solver.solve(chart.num_elements_to_be_chosen())};
-            auto fin = std::chrono::high_resolution_clock::now();
-            elapsed_time += std::chrono::duration<double>(fin - ini).count();
-
-            std::cout << '\t' << ((double)solution.calc_dispersion()) / 10000;
-        }
-        std::cout << '\t' << elapsed_time/10 << "s" << std::endl;
+    for (auto n : s) {
+        std::cout << ',' << n;
     }
 
-    std::cout << "Resultados del algoritmo de Búsqueda Local:" << std::endl;
-
-    for (const auto& path : data_files) {
-        double elapsed_time = 0.0;
-        std::cout << path;
-
-        std::fstream ifile{path.string(), std::ios_base::in};
-        MDDChart chart{make_MDDChart(ifile)};
-        for (unsigned i = 0; i < 10; i++) {
-            LocalSearchMDDSolver solver{i, std::make_shared<const MDDChart>(chart)};
-            auto ini = std::chrono::high_resolution_clock::now();
-            MDDSolution solution {solver.solve(chart.num_elements_to_be_chosen())};
-            auto fin = std::chrono::high_resolution_clock::now();
-            elapsed_time += std::chrono::duration<double>(fin - ini).count();
-
-            std::cout << '\t' << ((double)solution.calc_dispersion()) / 10000;
-        }
-        std::cout << '\t' << elapsed_time/10 << "s" << std::endl;
-    }
+    return 0;
 }
