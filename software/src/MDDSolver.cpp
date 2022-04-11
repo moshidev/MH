@@ -6,7 +6,7 @@ MDDSolver::MDDSolver(unsigned seed, const std::shared_ptr<const MDDChart>& c)
 
 void MDDSolver::init_nonchosen(std::set<MDDSolution::index_t>& nonchosen) const noexcept {
     nonchosen.clear();
-    for (int i = 0; i < chart->num_elements(); i++) {
+    for (unsigned i = 0; i < chart->num_elements(); i++) {
         nonchosen.insert(i);
     }
 }
