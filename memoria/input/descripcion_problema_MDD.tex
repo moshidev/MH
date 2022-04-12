@@ -1,7 +1,7 @@
 
 El Problema de la Mínima Dispersión Diferencial es un problema de optimización combinatoria NP-Completo.\cite{Seminario2MH}
 
-Este se presenta en distintas situaciones como decidir la localización de instalaciones públicas,
+Este se presenta en distintas situaciones como al decidir la localización de instalaciones públicas,
 la selección de grupos homogéneos, la identificación de grafos densos/regulares o el reparto equitativo en problemas de
 flujo de red.\cite{DUARTE201546}
 
@@ -10,3 +10,10 @@ seleccionar un subconjunto de estos de forma que todos estén más o menos a la 
 
 \section{Formulación del Problema}
 
+Podemos describir el problema como
+$$\textrm{Minimizar } Max_{i\in M}\{\sum_{j\in M}^{}d_{ij}\}-Min_{i\in M}\{\sum_{j\in M}^{}d_{ij}\} $$
+Donde $M$ es un subconjunto de $N$, el conjunto de todos los posibles puntos y donde $d_{ij}$ es la distancia desde dos puntos $i$ y $j$.
+$|M| = m$, siendo $m$ el número de elementos a escoger de $N$.
+
+La complejidad de este problema nos obliga a utilizar algoritmos que puedan encontrar el óptimo de una forma aproximada en un tiempo de computación razonable.
+Entre las técnicas más populares podemos destacar GRASP, Búsqueda Local o métodos basados en Poblaciones.\cite{MDP2010}
