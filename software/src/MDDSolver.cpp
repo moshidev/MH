@@ -1,3 +1,8 @@
+/**
+ * Daniel Pedrosa Montes © 2022
+ * Expat (MIT) License.
+ */
+
 #include "MDDSolver.hpp"
 
 MDDSolver::MDDSolver(unsigned seed, const std::shared_ptr<const MDDChart>& c)

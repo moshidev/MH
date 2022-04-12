@@ -1,3 +1,8 @@
+/**
+ * Daniel Pedrosa Montes © 2022
+ * Expat (MIT) License.
+ */
+
 #ifndef GREEDY_MDD_SOLVER_HPP_
 #define GREEDY_MDD_SOLVER_HPP_
 

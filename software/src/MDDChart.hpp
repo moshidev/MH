@@ -1,3 +1,8 @@
+/**
+ * Daniel Pedrosa Montes © 2022
+ * Expat (MIT) License.
+ */
+
 #ifndef MDD_CHART_HPP_
 #define MDD_CHART_HPP_
 

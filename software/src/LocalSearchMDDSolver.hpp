@@ -1,3 +1,8 @@
+/**
+ * Daniel Pedrosa Montes © 2022
+ * Expat (MIT) License.
+ */
+
 #ifndef LOCAL_SEARCH_MDD_SOLVER_HPP_
 #define LOCAL_SEARCH_MDD_SOLVER_HPP_
 
