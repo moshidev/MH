@@ -177,7 +177,8 @@
 		colorlinks = true,
 		linkcolor  = black,
 		filecolor  = black,
-		urlcolor   = darkgray
+		urlcolor   = darkgray,
+		citecolor  = darkgray
 	}
 
 % Add space between paragraphs
