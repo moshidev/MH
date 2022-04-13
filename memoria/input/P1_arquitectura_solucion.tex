@@ -21,32 +21,35 @@ de datos más eficientes en un futuro sin tener por ello que cambiar el código 
 
 Así, los algoritmos describen únicamente las políticas sobre los mecanismos de las estructuras de datos en las que dependen.
 
-\section{Estructuras de datos comunes}
-
-Para representar la matriz que define las distancias entre puntos utilizamos un vector para favorecer la localidad espacial y temporal de la memoria al realizar un acceso secuencial, como cuando se da el caso cuando necesitamos añadir un punto a una solución. Gracias a una función constructura
-podemos leer estos datos de un fichero de texto plano, el cual indica tanto las distancias entre puntos como el número de puntos existentes en el
-archivo asi como el número de puntos a seleccionar.
-
-Por otra parte para representar una solución utilizamos un diccionario. Hay alternativas más eficientes, como utilizar un vector binario. Por ahora
-esto no nos preocupa, ya que las soluciones se obtienen en un tiempo aceptable aun para instancias grandes del problema y al estar abstraidos los mecanismos concretos
-para actuar sobre la estructura de datos interna concreta que almacena la solución del algoritmo será fácil de cambiar en un futuro en caso de ser necesario sin
-afectar por ello a la implementación de los algoritmos. La interfaz para actuar sobre la solución nos permite añadir y extraer puntos de la solución
-de la forma más eficiente posible, además de poder estimar la dispersión de un punto determinado sobre una solución concreta sin tener que añadirlo a
-la solución en sí. Para conseguir esto guardamos en el diccionario tanto los puntos escogidos para una solución en concreto como la suma de la distancia desde el punto
-al resto de puntos en la solución. En general, estas implementaciones son fruto de unas decisiones de diseño concretas, como la separación de responsabilidades anteriormente
-mencionadas, la modificación de un estado únicamente cuando sea necesario, la no pesimización del código y el cálculo eficiente. Además, minimizamos al máximo la copia y la redundancia
-de los datos del problema, algoritmo y solución, ya sea permanente o temporal.
-
-También generalizamos la interfaz de los algoritmos de forma que no sea necesario conocer en tiempo de compilación la implementación concreta del algoritmo que resuelva el problema.
-
-\section{Aspectos que comparten los distintos algoritmos}
-
-Ambos algoritmos buscan encontrar los puntos pertenecientes al conjunto dado de tal que formen una solución válida y minimicen la dispersión entre ellos. Por tanto la función objetivo de los algoritmos buscarán encontrar las soluciones tal que $ Disp(Sol^{\prime}) < Disp(Sol) $.
-
-Para tener memoria de los no escogidos en la solución que se devolverá los algoritmos mantienen durante la ejecución del algoritmo un conjunto de puntos no escogidos que se va actualizando cada vez que se añade, retira o intercambia un punto de la solución.
-
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \includegraphics[width=\textwidth]{DiagramaClasesArquitectura.drawio.png}
     \caption{Diagrama de Clases de la solución.}
 \end{figure}
+
+\section{Estructuras de datos comunes}
+
+Para representar la matriz que define las distancias entre puntos utilizamos un vector para favorecer la localidad espacial y
+temporal de la memoria al realizar un acceso secuencial, como cuando se da el caso cuando necesitamos añadir un punto a una solución.
+Gracias a una función constructura podemos leer estos datos de un fichero de texto plano, el cual indica tanto las distancias entre
+puntos como el número de puntos existentes en el archivo asi como el número de puntos a seleccionar.
+
+Por otra parte para representar una solución utilizamos un diccionario. Hay alternativas más eficientes, como utilizar un vector binario.
+Por ahora esto no nos preocupa, ya que las soluciones se obtienen en un tiempo aceptable aun para instancias grandes del problema y 
+al estar abstraidos los mecanismos concretos para actuar sobre la estructura de datos interna concreta que almacena la solución del
+algoritmo será fácil de cambiar en un futuro en caso de ser necesario sin afectar por ello a la implementación de los algoritmos. La
+interfaz para actuar sobre la solución nos permite añadir y extraer puntos de la solución de la forma más eficiente posible, además
+de poder estimar la dispersión de un punto determinado sobre una solución concreta sin tener que añadirlo a la solución en sí. Para
+conseguir esto guardamos en el diccionario tanto los puntos escogidos para una solución en concreto como la suma de la distancia desde
+el punto al resto de puntos en la solución. En general, estas implementaciones son fruto de unas decisiones de diseño concretas, como la
+separación de responsabilidades anteriormente mencionadas, la modificación de un estado únicamente cuando sea necesario, la no pesimización
+del código y el cálculo eficiente. Además, minimizamos al máximo la copia y la redundancia de los datos del problema, algoritmo y solución,
+ya sea permanente o temporal.
+
+También generalizamos la interfaz de los algoritmos de forma que no sea necesario conocer en tiempo de compilación la implementación
+concreta del algoritmo que resuelva el problema.
+
+\section{Aspectos que comparten los distintos algoritmos}
+
+Ambos algoritmos buscan encontrar los puntos pertenecientes al conjunto dado de tal que formen una solución válida y minimicen la dispersión
+entre ellos. Por tanto la función objetivo de los algoritmos buscarán encontrar las soluciones tal que $ Disp(Sol^{\prime}) < Disp(Sol) $.
