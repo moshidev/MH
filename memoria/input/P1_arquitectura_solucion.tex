@@ -53,3 +53,45 @@ concreta del algoritmo que resuelva el problema.
 
 Ambos algoritmos buscan encontrar los puntos pertenecientes al conjunto dado de tal que formen una solución válida y minimicen la dispersión
 entre ellos. Por tanto la función objetivo de los algoritmos buscarán encontrar las soluciones tal que $ Disp(Sol^{\prime}) < Disp(Sol) $.
+
+Para tener memoria de los no escogidos en la solución que se devolverá los algoritmos mantienen durante la ejecución del algoritmo un
+conjunto de puntos no escogidos que se va actualizando cada vez que se añade, retira o intercambia un punto de la solución.
+
+\section{Inserción y eliminación de un punto de la solución}
+
+Como comentamos superficialmente en secciones anteriores la inserción y eliminación de un punto de la solución está implementada de tal
+forma que consuma la cantidad mínima de recursos en tiempo, consiguiendo realizar ambas en orden $ \Theta(m) $, siendo $ m $ el 
+número de puntos en la solución después de insertar o antes de eliminar.
+
+Para conseguir esto seguimos el algoritmo definido en pseudocódigo en la función \texttt{inserta\_punto\_en\_solucion}, el cual es también bastante parecido
+a la función \texttt{elimina\_punto\_en\_solucion}.
+
+\begin{minipage}{\textwidth}
+\begin{lstlisting}[mathescape=true]
+suma_distancias_desde_un_punto_hasta_los_puntos_de_una_solucion(v, solucion):
+    sum = 0
+    por cada punto p en solucion:
+        sum = sum + distancia(v, p)
+    devuelve sum
+
+inserta_punto_en_solucion(v, solucion):
+    si v $ \in $ solucion:
+        aborta
+
+    por cada punto p en solucion:
+        p.suma_distancias = p.suma_distancias + distancia(v, p)
+    
+    v.suma_distancias =
+        suma_distancias_desde_un_punto_hasta_los_puntos_de_una_solucion(v, solucion)
+    solucion.inserta(v)
+
+elimina_punto_en_solucion(v, solucion):
+    si v $ \notin $ solucion:
+        aborta
+    
+    por cada punto p en solucion:
+        p.suma_distancias = p.suma_distancias - distancia(v, p)
+    
+    solucion.elimina(v)
+\end{lstlisting}
+\end{minipage}
