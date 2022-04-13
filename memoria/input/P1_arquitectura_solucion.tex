@@ -57,7 +57,7 @@ entre ellos. Por tanto la función objetivo de los algoritmos buscarán encontra
 Para tener memoria de los no escogidos en la solución que se devolverá los algoritmos mantienen durante la ejecución del algoritmo un
 conjunto de puntos no escogidos que se va actualizando cada vez que se añade, retira o intercambia un punto de la solución.
 
-\section{Añadir y eliminar puntos de la solución. Cálculo de la dispersión de una solución o posible solución.}
+\section{Añadir y eliminar puntos de la solución. Cálculo de la dispersión de una solución o posible solución}
 
 Como comentamos superficialmente en secciones anteriores la inserción y eliminación de un punto de la solución está implementada de tal
 forma que consuma la cantidad mínima de recursos en tiempo, consiguiendo realizar ambas en orden $ \Theta(m) $, siendo $ m $ el 
@@ -117,3 +117,9 @@ def calcula_dispersión_de_punto_candidato(v, solucion):
     devuelve max - min
 \end{lstlisting}
 \end{minipage}
+
+\section{Selección de elementos aleatorios}
+
+Para generar números aleatorios hemos utilizado un generador pseudo-aleatorio de tipo Mersenne Twister, inicializado con una semilla.
+Para seleccionar un elemento perteneciente a un conjunto hemos utilizado un generador aleatorio que devuelve valores en una distribución uniforme
+el cual utiliza como motor el generador mencionado anteriormente.
