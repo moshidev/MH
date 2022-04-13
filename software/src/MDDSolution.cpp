@@ -21,7 +21,7 @@ sum_t MDDSolution::distance_summatory_from_index_to_solution(index_t v) const no
 }
 
 void MDDSolution::update_maximum_and_minimum(void) {
-    if (solution.empty()) {
+    [[unlikely]] if (solution.empty()) {
         maximum = 0;
         minimum = 0;
         return;
@@ -38,7 +38,7 @@ void MDDSolution::update_maximum_and_minimum(void) {
 }
 
 void MDDSolution::add_index_to_solution(index_t index) noexcept {
-    if (solution.find(index) != solution.end()) {
+    [[unlikely]] if (solution.find(index) != solution.end()) {
         return;
     }
 
@@ -50,7 +50,7 @@ void MDDSolution::add_index_to_solution(index_t index) noexcept {
 }
 
 void MDDSolution::remove_index_from_solution(index_t index) noexcept {
-    if (solution.find(index) == solution.end()) {
+    [[unlikely]] if (solution.find(index) == solution.end()) {
         return;
     }
 

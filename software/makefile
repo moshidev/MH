@@ -1,5 +1,5 @@
 CXX = g++
-CXX_FLAGS = -std=c++17 -g -Og -Wall -I.
+CXX_FLAGS = -std=c++20 -g -Og -Wall -I.
 
 TARGETS := $(patsubst %.cpp, src/%.cpp, main.cpp)
 EXCLUDE := $(patsubst %.cpp, src/%.cpp, MDDChart_Tests.cpp GreedyMDDSolver_Tests.cpp LocalSearchMDDSolver_Tests.cpp)
