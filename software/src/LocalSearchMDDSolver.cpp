@@ -31,6 +31,7 @@ MDDChart::index_t LocalSearchMDDSolver::best_first_neighbour_from_index(MDDChart
         sum_t dispersion = s_tmp.calc_index_candidate_dispersion(a);
         if (dispersion < best_index_dispersion) {
             best_index = a;
+            best_index_dispersion = dispersion;
             return best_index;
         }
     }
