@@ -1,0 +1,53 @@
+Para analizar la calidad del algoritmo realizamos dos tipos diferentes de benchmark, uno que cuantifica la dispersión
+media de distintas ejecuciones con distintas semillas para cada algoritmo y otro que estima después de un número
+determinado de ejecuciones el tiempo de ejecución medio de cada algoritmo para cada dataset. Cuanto más se aproxime
+a cero la dispersión mejor será el algoritmo. A iguales dispersiones consideraremos que un algoritmo es mejor que otro
+si el tiempo de ejecución es significativamente menor.
+
+\section{Procedimiento para la obtención de resultados}
+
+Los resultados disponibles en los cuadros de esta sección han sido resultado de distintas ejecuciones.
+
+Para obtener la dispersión hemos ejecutado el algoritmo para cada dataset para 5 semillas distintas disponibles
+en el script lanzador. Cada fila de los cuadros 3 y 4 corresponde a la dispersión media de los 5 resultados de cada
+una de estas ejecuciones.
+
+Por otra parte, para obtener el tiempo medio de ejecución para fila de las tablas hemos ejecutado cada dataset
+para 5 semillas unas 50 veces en invocaciones diferentes y obtenido la media de los resultados del tiempo de estas
+$ 50 \cdot 5 $ ejecuciones.
+
+Por último hemos calculado la desviación media de las soluciones para cada tabla como la suma de las desviaciones
+entre el número de casos, símil para el caso del cálculo del tiempo medio. La desviación la hemos calculado como la
+diferencia entre el coste en dispersión de nuestro algoritmo y el coste de nuestra referencia.
+
+\input{resources/tabla_medias_greedy.tex}
+\input{resources/tabla_medias_localsearch.tex}
+
+\section{Análisis de los datos obtenidos}
+
+En general, los resultados obtenidos son bastante mejorables si los comparamos con las dispersiones de referencia. Como hemos
+comentado anteriormente y volveremos a repetir, el factor que más influye en la obtención de resultados es la solución inicial,
+ya que al al explorar el espacio de soluciones casi que exclusivamente inmediatamente contiguo será fácil llegar a una solución
+la cual no tenga vecinos mejores, quedando por tanto atrapado en un óptimo local y ofreciendo costes muy diferentes según la semilla
+utilizada para el generador aleatorio.
+Podemos observar estos hechos en la figura 4.1, especialemente en el caso de la Búsqueda Local por Primer Mejor Vecino y por Mejor Vecino.
+En general podemos observar que existen muchos resultados con dispersiones muy distintas por encima del tercer cuartil. También lo explicamos
+como consecuencia de los factores expuestos.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[keepaspectratio]{box_and_whisker_dispersion_media_dataset_y_tipo_algoritmo_greedy_BLPMV_BLMV.png}
+    \caption{Dispersión media por dataset y por tipo de algoritmo. Podemos observar que hay una alta desviación típica del coste de las soluciones.
+    Destaca el algoritmo de Búsqueda Local por Mejor Vecino por dar peores resultados realizando más iteraciones que el de por Primer
+    Mejor Vecino, aunque con mejores resultados de media que el Greedy y con la mediana prácticamente idéntica al Búsqueda Local por Primer Mejor Vecino.
+    Probablemente esto se deba a que aunque recorre más exhaustivamente el espacio de soluciones, la falta de aleatoriedad y de generación
+    de soluciones distantes entre sí ocasiona que el BL por Mejor Vecino se quede atascado en un óptimo local sin haber explorado mucho el espacio
+    de soluciones, al igual que le ocurre al algoritmo Greedy.}
+\end{figure}
+
+Para aumentar el espacio en el espacio de soluciones del conjunto de soluciones consideradas por los algoritmos Greedy y de Búsqueda Local y no quedar
+así atrapados en óptimos locales utilizando estrategias de BL podríamos probar variantes como la Búsqueda Local Estocástica, Búsqueda Local por Primer Mejor Aleatorio, Búsqueda Local
+con Reinicio Aleatorio u otras técnicas más avanzadas como el Enfriamiento Simulado o búsqueda \textit{Local Beam} entre otros.\cite[Sección 4.1]{russell2020artificial}
+
+\input{resources/tabla_ejecuciones_greedy.tex}
+\input{resources/tabla_ejecuciones_localsearch.tex}
