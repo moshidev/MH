@@ -26,7 +26,15 @@ do
     for f in $files_wspaces
     do  
         # mala significancia estadística... sería mejor hacerlo con google-benchmark
-        echo "$f    $(echo_average_time $a $seeds $f 10)" >> average_times_$a.dat
+        echo "$f    $(echo_average_time "$a" "$seeds" "$f" 1)" >> average_times_$a.dat
+        valores=$(bin/main_exe "$a" "$seeds" "$f" | cut -d$'\t' -f 2,3,4,5,6)
+        sum=0
+        for v in $valores
+        do
+            sum=$(bc -l <<< "$sum + $v")
+        done
+        avg=$(bc -l <<< "$sum / 5")
+        echo "$f    $avg" >> dispersion_media_$a.dat
     done
 done
 
