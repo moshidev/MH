@@ -5,4 +5,4 @@ render:
 	pdflatex memoria.tex -o memoria.pdf > /dev/null
 
 clean:
-	$(RM) *.aux *.fdb_latexmk *.fls *.log *.out *.toc *.pdf *.synctex.gz
+	$(RM) *.aux *.fdb_latexmk *.fls *.log *.out *.toc *.pdf *.bbl *.blg *.synctex.gz
