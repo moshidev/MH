@@ -5,10 +5,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "(lldb) Launch",
+            "name": "(lldb) Launch template",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/LocalSearchMDDSolver_Tests_exe",
+            "program": "${workspaceFolder}/bin/main_exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
