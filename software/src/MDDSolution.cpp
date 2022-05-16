@@ -80,3 +80,26 @@ unsigned MDDSolution::calc_index_candidate_dispersion(index_t index) const noexc
 
     return max-min;
 }
+
+MDDSolution MDDSolution::intersect(const MDDSolution& rh) const noexcept {
+    MDDSolution res{chart};
+
+    auto lit = solution.cbegin();
+    auto rit = rh.solution.cbegin();
+
+    while (lit != solution.end() && rit != rh.solution.end()) {
+        if (lit->first == rit->first) {
+            res.add_index_to_solution(lit->first);
+            ++lit;
+            ++rit;
+        }
+        else if (lit->first < rit->first) {
+            ++lit;
+        }
+        else {
+            ++rit;
+        }
+    }
+
+    return res;
+}

@@ -39,6 +39,8 @@ public:
 
     inline bool is_valid(void) const noexcept { return solution.size() == chart->num_elements_to_be_chosen(); }
     inline const solution_t& get_solution(void) const noexcept { return solution; }
+
+    MDDSolution intersect(const MDDSolution& rh) const noexcept;
 };
 
 #endif /* MDD_SOLUTION_HPP_ */
