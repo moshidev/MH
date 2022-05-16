@@ -20,12 +20,14 @@ private:
     solution_t solution;
     sum_to_other_indexes_in_solution_t maximum;
     sum_to_other_indexes_in_solution_t minimum;
-    const std::shared_ptr<const MDDChart> chart;
+    std::shared_ptr<const MDDChart> chart;
 
     void update_maximum_and_minimum(void);
 
 public:
     MDDSolution() = delete;
+    MDDSolution(const MDDSolution& sol) = default;
+    MDDSolution(MDDSolution&& sol) = default;
     MDDSolution(const std::shared_ptr<const MDDChart>& c);
 
     sum_to_other_indexes_in_solution_t distance_summatory_from_index_to_solution(index_t v) const noexcept;
