@@ -50,6 +50,23 @@
             "externalConsole": false,
             "MIMode": "lldb",
             "preLaunchTask": "Build"
+        },
+        {
+            "name": "(lldb) AGE position",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/bin/main_exe",
+            "args": [
+                "genetic_age_position",
+                "15",
+                "data/GKD-b_50_n150_m45.txt"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "lldb",
+            "preLaunchTask": "Build"
         }
     ]
 }
