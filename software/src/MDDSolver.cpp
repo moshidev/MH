@@ -23,3 +23,8 @@ unsigned MDDSolver::choose_random(const std::set<MDDSolution::index_t>& s) noexc
     std::advance(it, rpos);
     return *it;
 }
+
+int MDDSolver::random_int(int i, int s) noexcept {
+    std::uniform_int_distribution<int> distribution{i, s};
+    return distribution(rgenerator);
+}

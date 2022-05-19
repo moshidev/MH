@@ -25,6 +25,7 @@ protected:
 
     void init_nonchosen(std::set<MDDSolution::index_t>& nonchosen) const noexcept;
     unsigned choose_random(const std::set<MDDSolution::index_t>& s) noexcept;
+    int random_int(int i, int s) noexcept;
 
 public:
     virtual ~MDDSolver() {}
