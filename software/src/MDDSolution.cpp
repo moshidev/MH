@@ -37,9 +37,9 @@ void MDDSolution::update_maximum_and_minimum(void) {
     minimum = min;
 }
 
-void MDDSolution::add_index_to_solution(index_t index) noexcept {
+bool MDDSolution::add_index_to_solution(index_t index) noexcept {
     [[unlikely]] if (solution.find(index) != solution.end()) {
-        return;
+        return false;
     }
 
     for (auto& e : solution) {
@@ -47,11 +47,12 @@ void MDDSolution::add_index_to_solution(index_t index) noexcept {
     }
     solution.emplace(index, distance_summatory_from_index_to_solution(index));
     update_maximum_and_minimum();
+    return true;
 }
 
-void MDDSolution::remove_index_from_solution(index_t index) noexcept {
+bool MDDSolution::remove_index_from_solution(index_t index) noexcept {
     [[unlikely]] if (solution.find(index) == solution.end()) {
-        return;
+        return false;
     }
 
     for (auto& e : solution) {
@@ -59,6 +60,7 @@ void MDDSolution::remove_index_from_solution(index_t index) noexcept {
     }
     solution.erase(index);
     update_maximum_and_minimum();
+    return true;
 }
 
 unsigned MDDSolution::calc_dispersion(void) const noexcept {
@@ -79,6 +81,17 @@ unsigned MDDSolution::calc_index_candidate_dispersion(index_t index) const noexc
     }
 
     return max-min;
+}
+
+std::vector<MDDSolution::index_t> MDDSolution::get_solution_vector(void) const noexcept {
+    std::vector<index_t> v;
+    v.reserve(solution.size());
+
+    for (auto& a : solution) {
+        v.push_back(a.first);
+    }
+
+    return v;
 }
 
 MDDSolution MDDSolution::intersect(const MDDSolution& rh) const noexcept {
