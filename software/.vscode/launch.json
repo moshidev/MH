@@ -16,6 +16,40 @@
             "externalConsole": false,
             "MIMode": "lldb",
             "preLaunchTask": "Build"
+        },
+        {
+            "name": "(lldb) AGG uniform",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/bin/main_exe",
+            "args": [
+                "genetic_agg_uniform",
+                "10",
+                "data/GKD-b_26_n100_m30.txt"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "lldb",
+            "preLaunchTask": "Build"
+        },
+        {
+            "name": "(lldb) AGG position",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/bin/main_exe",
+            "args": [
+                "genetic_agg_position",
+                "15",
+                "data/GKD-b_50_n150_m45.txt"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "lldb",
+            "preLaunchTask": "Build"
         }
     ]
 }
