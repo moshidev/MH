@@ -29,7 +29,7 @@ GeneticMDDSolver::population_t GeneticMDDSolver::select_by_binary_tournament(con
     for (int i = 0; i < num_to_be_selected; i++) {
         int a = random_int(0, p.size()-1);
         int b = random_int(0, p.size()-1);
-        s.push_back(p[a] > p[b] ? p[a] : p[b]);
+        s.push_back(p[a] < p[b] ? p[a] : p[b]);
     }
 
     return s;
@@ -76,8 +76,6 @@ std::pair<MDDSolution,MDDSolution> GeneticMDDSolver::crossover_uniform(GeneticMD
 std::pair<MDDSolution,MDDSolution> GeneticMDDSolver::crossover_position(GeneticMDDSolver* self, const MDDSolution& a, const MDDSolution& b) {
     MDDSolution intersection = a.intersect(b);
     MDDSolution child_a {intersection}, child_b {intersection};
-    auto va = a.get_solution_vector();
-    auto vb = b.get_solution_vector();
 
     while (child_a.get_solution().size() < a.get_solution().size()) {   // warning: bogo
         child_a.add_index_to_solution(self->random_int(0, a.get_chart().num_elements()-1));
