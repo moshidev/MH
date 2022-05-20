@@ -15,8 +15,8 @@
 #include "MDDSolution.hpp"
 #include "GreedyMDDSolver.hpp" 
 #include "LocalSearchMDDSolver.hpp" 
-#include "GeneticAGG_MDDSolver.hpp"
-#include "GeneticAGE_MDDSolver.hpp"
+#include "GeneticMDD.hpp"
+#include "GeneticMDDSolver.hpp"
 
 template<typename _T>
 static std::vector<_T> read_list(std::string str, char delimiter);
@@ -42,7 +42,7 @@ int main(int argn, char** argv) {
 
     char delimiter = ',';
     unsigned resolution = 100'000;
-    auto seeds = read_list<int>(argv[2], delimiter);
+    auto seeds = read_list<unsigned>(argv[2], delimiter);
     auto files = read_list<std::string>(argv[3], delimiter);
     auto charts = read_charts(files, resolution);
 
@@ -57,19 +57,27 @@ int main(int argn, char** argv) {
         double elapsed_time = 0.0;
         for (const auto& s : seeds) {
             std::unique_ptr<MDDSolver> solver;
-            if (tipo_algoritmo == "greedy") {
+            if (tipo_algoritmo == "greedy") {   // the absolute real yanderedev experience
                 solver = std::make_unique<GreedyMDDSolver>(s, c.second);
             }
             else if (tipo_algoritmo == "localsearch") {
                 solver = std::make_unique<LocalSearchMDDSolver>(s, c.second);
             }
             else if (tipo_algoritmo == "genetic_agg_uniform") {
+                GeneticMDD alg{s, 50, 0.7, 0.1, GeneticMDD::crossover_uniform, GeneticMDD::reemplace_generational};
+                solver = std::make_unique<GeneticMDDSolver>(s, c.second, alg, 100'000, 50);
             }
             else if (tipo_algoritmo == "genetic_agg_position") {
+                GeneticMDD alg{s, 50, 0.7, 0.1, GeneticMDD::crossover_position, GeneticMDD::reemplace_generational};
+                solver = std::make_unique<GeneticMDDSolver>(s, c.second, alg, 100'000, 50);
             }
             else if (tipo_algoritmo == "genetic_age_uniform") {
+                GeneticMDD alg{s, 2, 1.0, 0.1, GeneticMDD::crossover_uniform, GeneticMDD::reemplace_stationary};
+                solver = std::make_unique<GeneticMDDSolver>(s, c.second, alg, 100'000, 50);
             }
             else if (tipo_algoritmo == "genetic_age_position") {
+                GeneticMDD alg{s, 2, 1.0, 0.1, GeneticMDD::crossover_position, GeneticMDD::reemplace_stationary};
+                solver = std::make_unique<GeneticMDDSolver>(s, c.second, alg, 100'000, 50);
             }
             auto ini = std::chrono::high_resolution_clock::now();
             auto solution = solver->solve(c.second->num_elements_to_be_chosen());
