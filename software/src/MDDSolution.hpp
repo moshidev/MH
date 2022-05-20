@@ -42,6 +42,7 @@ public:
 
     inline bool is_valid(void) const noexcept { return solution.size() == chart->num_elements_to_be_chosen(); }
     inline const MDDChart& get_chart(void) const noexcept { return *chart; }
+    inline const std::shared_ptr<const MDDChart>& get_chart_pointer(void) const noexcept { return chart; }
     inline const solution_t& get_solution(void) const noexcept { return solution; }
     std::vector<index_t> get_solution_vector(void) const noexcept;
 
