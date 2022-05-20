@@ -16,13 +16,15 @@ void GeneticAGE_MDDSolver::reemplace(population_t& to_be_reemplaced, population_
 }
 
 MDDSolution GeneticAGE_MDDSolver::solve(unsigned number_of_elements_to_be_chosen) noexcept {
+    num_eval = 0;
     MDDSolution solution{chart};
 
     population = generate_random_population(chromosome_count, number_of_elements_to_be_chosen);
     solution = population[find_best_solution_pos_in_population(population)];
 
-    for (int i = 0; i < 10'000'000; i++) {
+    while (num_eval < 100'000) {
         population_t selected = select_by_binary_tournament(population, num_selected_per_generation);
+        num_eval += selected.size();
         crossover(selected, crossover_probability, crossover_method); 
         mutate(selected, mutation_probability);
         reemplace(population, selected);

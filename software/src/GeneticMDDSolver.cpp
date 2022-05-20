@@ -3,10 +3,11 @@
  * Expat (MIT) License.
  */
 
+#include <random>
 #include "GeneticMDDSolver.hpp"
 
 GeneticMDDSolver::GeneticMDDSolver(unsigned seed, const std::shared_ptr<const MDDChart>& c)
-:MDDSolver{seed, c}
+:MDDSolver{seed, c}, num_eval{0}
 {   }
 
 GeneticMDDSolver::population_t GeneticMDDSolver::generate_random_population(int num_chromosomes, int num_genes) noexcept {
@@ -73,15 +74,36 @@ std::pair<MDDSolution,MDDSolution> GeneticMDDSolver::crossover_uniform(GeneticMD
     return {child[0], child[1]};
 }
 
+std::vector<MDDSolution::index_t> get_distinct(const MDDSolution& sol_a, const MDDSolution& sol_b) {
+    std::vector<MDDSolution::index_t> distinct;
+
+    for (const auto& a : sol_a.get_solution()) {
+        if (sol_b.get_solution().find(a.first) == sol_b.get_solution().end()) {
+            distinct.push_back(a.first);
+        }
+    }
+    for (const auto& b : sol_b.get_solution()) {
+        if (sol_a.get_solution().find(b.first) == sol_a.get_solution().end()) {
+            distinct.push_back(b.first);
+        }
+    }
+
+    return distinct;
+}
+
 std::pair<MDDSolution,MDDSolution> GeneticMDDSolver::crossover_position(GeneticMDDSolver* self, const MDDSolution& a, const MDDSolution& b) {
+    std::mt19937 random_generator{static_cast<std::mt19937::result_type>(self->random_int(0, std::numeric_limits<int>::max()))};
     MDDSolution intersection = a.intersect(b);
     MDDSolution child_a {intersection}, child_b {intersection};
+    auto v_xor = get_distinct(a, b);
+    std::shuffle(v_xor.begin(), v_xor.end(), random_generator);
 
-    while (child_a.get_solution().size() < a.get_solution().size()) {   // warning: bogo
-        child_a.add_index_to_solution(self->random_int(0, a.get_chart().num_elements()-1));
-    }
-    while (child_b.get_solution().size() < b.get_solution().size()) {   // warning: bogo
-        child_b.add_index_to_solution(self->random_int(0, b.get_chart().num_elements()-1));
+    const unsigned n_iters = v_xor.size()/2;
+    for (int i = 0; i < n_iters; i++) {
+        child_a.add_index_to_solution(v_xor.back());
+        v_xor.pop_back();
+        child_b.add_index_to_solution(v_xor.back());
+        v_xor.pop_back();
     }
 
     return {child_a, child_b};
@@ -128,7 +150,17 @@ void GeneticMDDSolver::repair(MDDSolution& sol) noexcept {
     }
 }
 
-unsigned GeneticMDDSolver::find_best_solution_pos_in_population(const population_t& p) const noexcept {
+std::vector<bool> GeneticMDDSolver::get_binary_representation_from(const MDDSolution& sol) const noexcept {
+    std::vector<bool> v(sol.get_solution().size(), false);
+
+    for (const auto& a : sol.get_solution()) {
+        v[a.first] = true;
+    }
+ 
+    return v;
+}
+
+unsigned GeneticMDDSolver::find_best_solution_pos_in_population(const population_t& p) noexcept {
     unsigned best_solution_pos = 0;
     unsigned best_solution_dispersion{std::numeric_limits<unsigned>::max()};
 
@@ -143,7 +175,7 @@ unsigned GeneticMDDSolver::find_best_solution_pos_in_population(const population
     return best_solution_pos;
 }
 
-unsigned GeneticMDDSolver::find_worst_solution_pos_in_population(const population_t& p) const noexcept {
+unsigned GeneticMDDSolver::find_worst_solution_pos_in_population(const population_t& p) noexcept {
     unsigned worst_solution_pos = 0;
     unsigned worst_solution_dispersion{std::numeric_limits<unsigned>::min()};
 

@@ -17,6 +17,7 @@ protected:
     typedef std::vector<MDDSolution> population_t;
     typedef std::function<std::pair<MDDSolution,MDDSolution>(GeneticMDDSolver*,const MDDSolution&,const MDDSolution&)> crossover_func_t;
     population_t population;
+    unsigned num_eval;
 
     population_t generate_random_population(int num_chromosomes, int num_genes) noexcept;
     population_t select_by_binary_tournament(const population_t& p, int num_to_be_selected) noexcept;
@@ -24,8 +25,10 @@ protected:
     void mutate(population_t& p, float probability) noexcept;
     void repair(MDDSolution& sol) noexcept;
 
-    unsigned find_best_solution_pos_in_population(const population_t& p) const noexcept;
-    unsigned find_worst_solution_pos_in_population(const population_t& p) const noexcept;
+    std::vector<bool> get_binary_representation_from(const MDDSolution& sol) const noexcept;
+
+    unsigned find_best_solution_pos_in_population(const population_t& p) noexcept;
+    unsigned find_worst_solution_pos_in_population(const population_t& p) noexcept;
 
 public:
     GeneticMDDSolver() = delete;
