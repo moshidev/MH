@@ -16,6 +16,7 @@
 #include "GreedyMDDSolver.hpp" 
 #include "LocalSearchMDDSolver.hpp" 
 #include "GeneticAGG_MDDSolver.hpp"
+#include "GeneticAGE_MDDSolver.hpp"
 
 template<typename _T>
 static std::vector<_T> read_list(std::string str, char delimiter);
@@ -34,7 +35,7 @@ int main(int argn, char** argv) {
 
     std::string tipo_algoritmo{argv[1]};
     std::transform(tipo_algoritmo.begin(), tipo_algoritmo.end(), tipo_algoritmo.begin(), [](char c){ return std::tolower(c); });
-    if (tipo_algoritmo != "greedy" && tipo_algoritmo != "localsearch" && tipo_algoritmo != "genetic_agg_uniform" && tipo_algoritmo != "genetic_agg_position") {
+    if (tipo_algoritmo != "greedy" && tipo_algoritmo != "localsearch" && tipo_algoritmo != "genetic_agg_uniform" && tipo_algoritmo != "genetic_agg_position" && tipo_algoritmo != "genetic_age_uniform" && tipo_algoritmo != "genetic_age_position") {
         std::cerr << "Tipo de algoritmo desconocido." << std::endl;
         return 1;
     }
@@ -63,14 +64,24 @@ int main(int argn, char** argv) {
                 solver = std::make_unique<LocalSearchMDDSolver>(s, c.second);
             }
             else if (tipo_algoritmo == "genetic_agg_uniform") {
-                solver = std::make_unique<GeneticAGG_MDDSolver>(s, c.second, 30, 0.7, 0.01);
+                solver = std::make_unique<GeneticAGG_MDDSolver>(s, c.second, 50, 0.7, 0.1);
                 GeneticAGG_MDDSolver* uniform = (GeneticAGG_MDDSolver*)solver.get();
                 uniform->set_crossover_method(uniform->crossover_uniform);
             }
             else if (tipo_algoritmo == "genetic_agg_position") {
-                solver = std::make_unique<GeneticAGG_MDDSolver>(s, c.second, 30, 0.7, 0.01);
-                GeneticAGG_MDDSolver* uniform = (GeneticAGG_MDDSolver*)solver.get();
-                uniform->set_crossover_method(uniform->crossover_position);
+                solver = std::make_unique<GeneticAGG_MDDSolver>(s, c.second, 50, 0.7, 0.1);
+                GeneticAGG_MDDSolver* position = (GeneticAGG_MDDSolver*)solver.get();
+                position->set_crossover_method(position->crossover_position);
+            }
+            else if (tipo_algoritmo == "genetic_age_uniform") {
+                solver = std::make_unique<GeneticAGE_MDDSolver>(s, c.second, 50, 0.1);
+                GeneticAGE_MDDSolver* uniform = (GeneticAGE_MDDSolver*)solver.get();
+                uniform->set_crossover_method(uniform->crossover_uniform);
+            }
+            else if (tipo_algoritmo == "genetic_age_position") {
+                solver = std::make_unique<GeneticAGE_MDDSolver>(s, c.second, 50, 0.1);
+                GeneticAGE_MDDSolver* position = (GeneticAGE_MDDSolver*)solver.get();
+                position->set_crossover_method(position->crossover_position);
             }
             auto ini = std::chrono::high_resolution_clock::now();
             auto solution = solver->solve(c.second->num_elements_to_be_chosen());
