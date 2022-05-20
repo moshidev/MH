@@ -16,6 +16,13 @@ void MDDSolver::init_nonchosen(std::set<MDDSolution::index_t>& nonchosen) const 
     }
 }
 
+void MDDSolver::init_nonchosen(std::set<MDDSolution::index_t>& nonchosen, const MDDSolution& sol) const noexcept {
+    init_nonchosen(nonchosen);
+    for (const auto& a : sol.get_solution()) {
+        nonchosen.erase(a.first);
+    }
+}
+
 unsigned MDDSolver::choose_random(const std::set<MDDSolution::index_t>& s) noexcept {
     std::uniform_int_distribution<MDDSolution::index_t> distribution{0, static_cast<MDDSolution::index_t>(s.size()-1)};
     unsigned rpos = distribution(rgenerator);

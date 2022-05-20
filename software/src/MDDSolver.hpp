@@ -24,6 +24,7 @@ protected:
     MDDSolver(unsigned seed, const std::shared_ptr<const MDDChart>& c);
 
     void init_nonchosen(std::set<MDDSolution::index_t>& nonchosen) const noexcept;
+    void init_nonchosen(std::set<MDDSolution::index_t>& nonchosen, const MDDSolution& sol) const noexcept;
     unsigned choose_random(const std::set<MDDSolution::index_t>& s) noexcept;
     int random_int(int i, int s) noexcept;
 
