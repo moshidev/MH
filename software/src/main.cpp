@@ -17,6 +17,7 @@
 #include "LocalSearchMDDSolver.hpp" 
 #include "GeneticMDD.hpp"
 #include "GeneticMDDSolver.hpp"
+#include "MemeticMDDSolver.hpp"
 
 template<typename _T>
 static std::vector<_T> read_list(std::string str, char delimiter);
@@ -35,7 +36,7 @@ int main(int argn, char** argv) {
 
     std::string tipo_algoritmo{argv[1]};
     std::transform(tipo_algoritmo.begin(), tipo_algoritmo.end(), tipo_algoritmo.begin(), [](char c){ return std::tolower(c); });
-    if (tipo_algoritmo != "greedy" && tipo_algoritmo != "localsearch" && tipo_algoritmo != "genetic_agg_uniform" && tipo_algoritmo != "genetic_agg_position" && tipo_algoritmo != "genetic_age_uniform" && tipo_algoritmo != "genetic_age_position") {
+    if (tipo_algoritmo != "greedy" && tipo_algoritmo != "localsearch" && tipo_algoritmo != "genetic_agg_uniform" && tipo_algoritmo != "genetic_agg_position" && tipo_algoritmo != "genetic_age_uniform" && tipo_algoritmo != "genetic_age_position" && tipo_algoritmo != "memetic_10_1.0" && tipo_algoritmo != "memetic_10_0.1" && tipo_algoritmo != "memetic_10_0.1best") {
         std::cerr << "Tipo de algoritmo desconocido." << std::endl;
         return 1;
     }
@@ -78,6 +79,15 @@ int main(int argn, char** argv) {
             else if (tipo_algoritmo == "genetic_age_position") {
                 GeneticMDD alg{s, 2, 1.0, 0.1, GeneticMDD::crossover_position, GeneticMDD::reemplace_stationary};
                 solver = std::make_unique<GeneticMDDSolver>(s, c.second, alg, 100'000, 50);
+            }
+            else if (tipo_algoritmo == "memetic_10_1.0") {
+                solver = std::make_unique<MemeticMDDSolver>(s, c.second, 50, 0.7, 0.1, 100'000, 1.0, false);
+            }
+            else if (tipo_algoritmo == "memetic_10_0.1") {
+                solver = std::make_unique<MemeticMDDSolver>(s, c.second, 50, 0.7, 0.1, 100'000, 0.1, false);
+            }
+            else if (tipo_algoritmo == "memetic_10_0.1best") {
+                solver = std::make_unique<MemeticMDDSolver>(s, c.second, 50, 0.7, 0.1, 100'000, 0.1, true);
             }
             auto ini = std::chrono::high_resolution_clock::now();
             auto solution = solver->solve(c.second->num_elements_to_be_chosen());
