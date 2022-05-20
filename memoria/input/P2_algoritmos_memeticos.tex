@@ -1,0 +1,59 @@
+Los algoritmos meméticos hibridan los algoritmos de búsqueda local con genéticos para obtener
+lo mejor de ambos, la exhaustividad de búsqueda en una parte concreta del espacio de soluciones
+y la amplitud de búsqueda en el espacio de soluciones respectivamente. Podemos jugar con la
+proporción de tiempo y la cantidad de cromosomas que evolucionamos o sometemos a búsqueda local
+para intentar obtener resultados diferentes.
+
+\section{Esquema de un Algoritmo Memético}
+
+Para la BL utilizamos un algoritmo de búsqueda local por mejor vecino con un máximo de 400 vecinos a evaluar
+y para el algoritmo genético utilizamos un AGG-uniforme.
+
+\begin{minipage}{\textwidth}
+\begin{lstlisting}[mathescape=true,caption={Esquema general de un algoritmo memético.},captionpos=b]
+var cantidad_cromosomas_a_seleccionar
+var num_genes
+var probabilidad_cruce
+var probabilidad_mutacion
+var algoritmo_genetico(probabilidad_cruce, probabilidad_mutacion)
+
+var algoritmo_bl
+var limite_vecinos_bl
+
+var porcentaje_cromosomas_a_someter_a_busqueda_local
+var numero_generaciones_entre_busquedas_locales
+var ordenar_seleccion_para_bl
+
+poblacion =
+algoritmo_genetico.inicializar_poblacion_aleatoriamente(cantidad_cromosomas, num_genes)
+
+def iteracion_algoritmo_memetico(poblacion):
+	repite numero_generaciones_entre_busquedas_locales:
+		algoritmo_genetico.iteracion(poblacion)
+
+	seleccionados = selecciona_para_bl(poblacion, porcentaje_cromosomas_a_someter_a_busqueda_local, ordenar_seleccion_para_bl)
+	por cada cromosoma c en seleccionados:
+		poblacion.elimina(c)
+		res = algoritmo_bl.resuelve(c, num_genes, limite_vecinos_bl)
+		poblacion.inserta(res)
+\end{lstlisting}
+\end{minipage}
+
+Dónde la función para seleccionar los cromosomas que se someterán a búsqueda local se define como:
+
+\begin{minipage}{\textwidth}
+\begin{lstlisting}[mathescape=true,caption={Definición de la función selecciona\_para\_bl.},captionpos=b]
+def selecciona_para_bl(poblacion, porcentaje_a_seleccionar, ordenar_seleccion):
+	seleccionados = []
+
+	si ordenar_seleccion:
+		ordena(poblacion)
+	si no:
+		aleatoriza(poblacion)
+	
+	seleccionados.inserta(poblacion.begin(), poblacion.end()+porcentaje_a_seleccionar*poblacion.size())
+	población.elimina(poblacion.begin(), poblacion.end()+porcentaje_a_seleccionar*poblacion.size())
+
+	devuelve seleccionados
+\end{lstlisting}
+\end{minipage}
