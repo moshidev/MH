@@ -13,8 +13,11 @@ con los siguientes pasos:
 \begin{minipage}{\textwidth}
 \begin{lstlisting}[mathescape=true,caption={Esquema general de un algoritmo genético.},captionpos=b]
 var cantidad_cromosomas_a_seleccionar
+var num_genes
 var probabilidad_cruce
 var probabilidad_mutacion
+
+poblacion = generar_poblacion_aleatoria(cantidad_cromosomas_a_seleccionar, num_genes)
 
 def iteracion_algoritmo_genetico(poblacion):
 	seleccionados = seleccionar(poblacion, cantidad_cromosomas_a_seleccionar)
