@@ -103,7 +103,7 @@ void GeneticMDD::reemplace_generational(population_t& to_be_reemplaced, populati
 	population_t selected_tmp{selected};
 	MDDSolution best_solution{*find_best_solution_in_population(to_be_reemplaced)};
     to_be_reemplaced.swap(selected_tmp);
-    to_be_reemplaced.erase(find_worst_solution_in_population(to_be_reemplaced));
+    to_be_reemplaced.erase(find_worst_solution_in_population(selected_tmp));
     to_be_reemplaced.push_back(best_solution);
 }
 
