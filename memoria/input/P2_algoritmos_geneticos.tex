@@ -1,0 +1,238 @@
+En la segunda práctica se nos pide implementar un algoritmo genético con distintas variaciones,
+según si el esquema de evolución es un esquema generacional con elitismo (AGG) o basada en
+uno estacionario (AGE) y también según el operador de cruce, uniforme o basado en posición.
+El esquema básico de un algoritmo se caracteriza por, sobre una población previamente inicializada
+y en este orden, realizar operaciones sobre la población y con probabilidades preestablecidas
+de seleccionar, cruzar mutar y reemplazar en cada iteración del algoritmo.
+
+\section{Operadores comunes a los distintos algoritmos}
+
+Como hemos introducido anteriormente, podemos definir una iteración de un algoritmo genético básico en pseudo-código
+con los siguientes pasos:
+
+\begin{minipage}{\textwidth}
+\begin{lstlisting}[mathescape=true,caption={Esquema general de un algoritmo genético.},captionpos=b]
+var cantidad_cromosomas_a_seleccionar
+var probabilidad_cruce
+var probabilidad_mutacion
+
+def iteracion_algoritmo_genetico(poblacion):
+	seleccionados = seleccionar(poblacion, cantidad_cromosomas_a_seleccionar)
+	cruzar(seleccionados, probabilidad_cruce)
+	mutar(seleccionados, probabilidad_mutacion)
+	reemplazar(poblacion, seleccionados)
+\end{lstlisting}
+\end{minipage}
+
+La definición de los algoritmos para cada uno de estos pasos puede ser diferente según el tipo de
+algoritmo genético que diseñemos o implementemos. En este capítulo describiremos nuestra solución
+y las diferentes definiciones de funciones para el algoritmo según las variaciones que se nos piden
+para este.
+
+\begin{minipage}{\textwidth}
+
+	\subsection{Función de Selección}
+
+	Utilizaremos para las distintas variantes selección por torneo binario. La selección por torneo binario
+	consiste en escoger dos cromosomas de la población original al azar, compararlos entre sí y seleccionar el
+	que mejor valoración tenga (en nuestro caso la solución con menor dispersión). Esto lo hacemos $n$ veces.
+	
+	En las variantes generacionales seleccionamos tantos como sea el tamaño de la población original, y en los
+	estacionarios únicamente seleccionamos dos.
+	
+\begin{lstlisting}[mathescape=true,caption={Definición de la función de selección.},captionpos=b]
+var generador_aleatorio_uniforme en rango {0, poblacion.size()-1}
+
+def selecciona(poblacion, cantidad_a_seleccionar) -> poblacion_seleccionada:
+	poblacion_seleccionada = []
+	mientras que seleccionados < cantidad_a_seleccionar
+		a = generador_aleatorio_uniforme.siguiente_numero()
+		b = generador_aleatorio_uniforme.siguiente_numero()
+		poblacion_seleccionada.anexa(a.dispersion < b.dispersion ? a : b)
+	devuelve poblacion_seleccionada
+\end{lstlisting}
+\end{minipage}
+
+\subsection{Función de cruce}
+
+La función de cruce se encarga de seleccionar aleatoriamente parejas de soluciones a cruzar
+con una probabilidad determinada. El cruce entre estas dos parejas se podrá realizar de distintas
+formas, según veremos en secciones anteriores. El esquema general de la función de cruce es el siguiente.
+
+\begin{minipage}{\textwidth}
+\begin{lstlisting}[mathescape=true,caption={Esquema general de la función de cruce.},captionpos=b]
+def cruce(poblacion, probabilidad, metodo_cruce):
+	por cada pareja de la poblacion escogidas aleatoriamente:
+		hijos = metodo_cruce(pareja.a, pareja.b)
+		poblacion[pareja.a] = hijos.a
+		poblacion[pareja.b] = hijos.b
+\end{lstlisting}
+\end{minipage}
+
+Generar las parejas de forma aleatoria es un proceso muy costoso. En nuestro caso, ya que
+anteriormente la selección se realizó aleatoriamente por torneo binario, no será necesario
+volver a aleatorizar el vector que contiene la población de nuevo.
+
+\begin{minipage}{\textwidth}
+\begin{lstlisting}[mathescape=true,caption={Definición de la función de cruce.},captionpos=b]
+def cruce(poblacion, probabilidad, metodo_cruce):
+	cruces_por_hacer = probabilidad * poblacion.size()/2	# Esperanza matematica
+	i = 0
+	mientras i < cruces_por_hacer:
+		# Cruzamos las parejas contiguas en el vector
+		hijos = metodo_cruce(poblacion[i*2], poblacion[i*2+1])
+		poblacion[i*2] = hijos.a
+		poblacion[i*2+1] = hijos.b
+		i = i + 1
+\end{lstlisting}
+\end{minipage}
+
+\subsection{Función de mutación}
+
+Es el tercer paso del esquema general de nuestro algoritmo genético y el que utilizaremos para las
+distintas versiones que implementamos. Su función es modificar aleatoriamente algunos genes de
+cada uno de los cromosomas para evitar que las soluciones se queden atascadas en zonas concretas
+del espacio de búsqueda.
+
+Nuestro operador de mutación selecciona cromosomas al azar, sobre los cuales selecciona uno de
+sus genes para sustituirlo por otro al azar de entre los no pertenecientes a la solución (cromosoma).
+Como hicimos en la función de cruce nos serviremos de la esperanza matemática para evitar generar números
+aleatorios innecesarios.
+
+La idea es la del siguiente listado.
+
+\begin{minipage}{\textwidth}
+\begin{lstlisting}[mathescape=true,caption={Definición de la función de mutación.},captionpos=b]
+var numero_genes_por_solucion_valida
+var dist_aleat_cromosoma en rango {0, poblacion.size()-1}
+var dist_aleat_gen en rango {0, numero_genes_por_solucion_valida-1}
+
+def muta(poblacion, probabilidad):
+	# Esperanza matematica
+	numero_mutaciones = probabilidad * numero_genes_por_solucion_valida
+	
+	por cada mutacion que tengamos que hacer:
+		cromosoma_a_mutar = poblacion[dist_aleat_cromosoma.siguiente()]
+		gen_a_mutar = dist_aleat_gen.siguiente()
+		cromosoma_a_mutar.elimina(gen_a_mutar)
+		cromosoma_a_mutar.inserta(gen aleatorio $\notin$ cromosoma_a_mutar)
+\end{lstlisting}
+\end{minipage}
+
+\subsection{Función de reemplazamiento}
+
+La función de reemplazamiento cambia completamente según la variación del algoritmo que hayamos
+implementado. En secciones siguientes explicaremos la definición concreta del algoritmo que hayamos
+utilizado.
+
+El objetivo de la función de reemplazamiento es el de sustituir la población del inicio de la iteración
+del algoritmo genético (o partes de esta) por la población modificada por los operadores vistos en subsecciones
+anteriores (o partes de esta).
+
+\section{Operadores de cruce}
+
+Como dijimos anteriormente, la función de cruce se encarga de seleccionar aleatoriamente parejas de soluciones a cruzar
+con una probabilidad determinada. Existen distintas técnicas para cruzar dos cromosomas.
+Nosotros implementamos dos métodos distintos para cruzar dos soluciones, uno uniforme y otro basado en posición.
+
+\subsection{Operador de cruce uniforme}
+
+En nuestro problema, el MDD, el operador de cruce uniforme busca conservar las selecciones prometedoras manteniendo
+la intersección de genes de ambos padres (tanto de genes en común como genes que no tienen ninguno de los dos). Para el
+resto de selecciones que escapan la intersección los hijos se crean eligiendo aleatoriamente genes de un padre o del otro.
+
+\begin{minipage}{\textwidth}
+\begin{lstlisting}[mathescape=true,caption={Definición del operador de cruce uniforme.},captionpos=b]
+def cruce_uniforme(padre_a, padre_b) -> hijo_a,hijo_b:
+	hijo_a = padre_a $\cap $ padre_b
+	hijo_b = padre_a $\cap $ padre_b
+	por cada hijo:
+		por cada gen no perteneciente a padre_a $\cap $ padre_b:	# padre_a $xor$ padre_b
+			hijo.inserta_gen_al_50%_de_probabilidad(gen)
+		repara(hijo)
+
+	devuelve hijo_a,hijo_b
+\end{lstlisting}
+\end{minipage}
+
+\begin{minipage}{\textwidth}
+
+\subsubsection{Reparador para el operador uniforme}
+
+Este operador genera soluciones que pueden no ser factibles, por tanto necesitaremos una función que repare a los hijos que genere
+nuestro operador de cruce.
+
+\begin{lstlisting}[mathescape=true,caption={Definición del operador de reparación para el operador de cruce uniforme.},captionpos=b]
+def repara(cromosoma):
+	si el cromosoma es factible:
+		terminar
+	mientras que el cromosoma tenga $mas$ genes de los que debería:
+		gen = gen_perteneciente_al_cromosoma_que_maximiza_la_dispersion(cromosoma)
+		cromosoma.elimina(gen)
+	mientras que el cromosoma tenga $menos$ genes de los que debería:
+		gen = gen_no_escogido_en_cromosoma_que_minimiza_la_dispersion(cromosoma)
+		cromosoma.inserta(gen)
+\end{lstlisting}
+\end{minipage}
+
+\subsection{Operador de cruce basado en posición}
+
+El operador de cruce basado en posición al igual que el uniforme conserva en los hijos la intersección de los padres.
+Se diferencia del uniforme en que en vez de ir escogiendo genes para los hijos aleatoriamente entre los padres distribuye
+los genes de los padres que no intersectan entre los dos hijos (y por tanto no necesitando una función de reparación).
+Es más disruptivo que el uniforme, y por tanto es más complicado que converja. \cite{Seminario3MH}
+Definimos el operador de la siguiente forma.
+
+\begin{minipage}{\textwidth}
+\begin{lstlisting}[mathescape=true,caption={Definición del operador de cruce basado en posición.},captionpos=b]
+def cruce_posicion(padre_a, padre_b) -> hijo_a,hijo_b:
+	hijo_a = padre_a $\cap $ padre_b
+	hijo_b = padre_a $\cap $ padre_b
+	gen_xor = padre_a $\cup $ padre_b - padre_a $\cap $ padre_b
+	aleatoriza(gen_xor)
+	
+	hijo_a.inserta(primera mitad gen_xor)
+	hijo_b.inserta(segunda mitad gen_xor)
+
+	devuelve hijo_a,hijo_b
+\end{lstlisting}
+\end{minipage}
+
+\section{Modelos de los algoritmos genéticos implementados}
+
+\subsection{Modelo generacional}
+
+Consiste en seleccionar por torneo binario tantos cromosomas como cromosomas tenga la población original, cruzar
+con una probabilidad $P_{c}$ (que en nuestro caso será de 0.7), mutar esta selección cruzada
+una probabilidad $P_{m}$ (en nuestro caso 0.1) y reemplazar la población original por la nueva, aunque con elitismo,
+esto es, manteniendo la mejor solución de la población original sobre el peor cromosoma de la nueva.
+Definimos el operador de reemplazamiento del modelo generacional en el siguiente listado.
+
+\begin{minipage}{\textwidth}
+\begin{lstlisting}[mathescape=true,caption={Definición del operador de reemplazamiento del modelo generacional.},captionpos=b]
+def reemplazamiento_generacional(a_reemplazar, poblacion_nueva):
+	mejor_solucion = encuentra_mejor_solucion(a_reemplazar)
+	swap(mejor_solucion, poblacion_nueva)
+	a_reemplazar.elimina(encuentra_peor_solucion(poblacion_nueva))
+	a_reemplazar.inserta(mejor_solucion)
+\end{lstlisting}
+\end{minipage}
+
+\subsection{Modelo estacionario}
+
+Por otra parte en el modelo estacionario en cada iteración del algoritmo genético seleccionamos únicamente dos
+cromosomas, también por torneo binario. Cruzamos los cromosomas seleccionados con probabilidad 1 y mutamos con
+probabilidad $P_{m}$ (en nuestro caso 0.1). A la hora de reemplazar la población original por la nueva únicamente
+reemplazamos las peores soluciones de la original por las de la nueva únicamente si son mejores que esta. Podemos
+verlo en la siguiente definición del algoritmo de reemplazamiento.
+
+\begin{minipage}{\textwidth}
+\begin{lstlisting}[mathescape=true,caption={Definición del operador de reemplazamiento del modelo estacionario.},captionpos=b]
+def reemplazamiento_estacionario(a_reemplazar, poblacion_nueva):
+	por cada cromosoma de la poblacion_nueva:
+		peor_solucion = encuentra_peor_solucion(poblacion_nueva)
+		si cromosoma.dispersion < peor_solucion.dispersion
+			a_reemplazar.elimina(peor_solucion)
+			a_reemplazar.inserta(cromosoma)
+\end{lstlisting}
+\end{minipage}
