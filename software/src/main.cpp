@@ -64,24 +64,12 @@ int main(int argn, char** argv) {
                 solver = std::make_unique<LocalSearchMDDSolver>(s, c.second);
             }
             else if (tipo_algoritmo == "genetic_agg_uniform") {
-                solver = std::make_unique<GeneticAGG_MDDSolver>(s, c.second, 50, 0.7, 0.1);
-                GeneticAGG_MDDSolver* uniform = (GeneticAGG_MDDSolver*)solver.get();
-                uniform->set_crossover_method(uniform->crossover_uniform);
             }
             else if (tipo_algoritmo == "genetic_agg_position") {
-                solver = std::make_unique<GeneticAGG_MDDSolver>(s, c.second, 50, 0.7, 0.1);
-                GeneticAGG_MDDSolver* position = (GeneticAGG_MDDSolver*)solver.get();
-                position->set_crossover_method(position->crossover_position);
             }
             else if (tipo_algoritmo == "genetic_age_uniform") {
-                solver = std::make_unique<GeneticAGE_MDDSolver>(s, c.second, 50, 0.1);
-                GeneticAGE_MDDSolver* uniform = (GeneticAGE_MDDSolver*)solver.get();
-                uniform->set_crossover_method(uniform->crossover_uniform);
             }
             else if (tipo_algoritmo == "genetic_age_position") {
-                solver = std::make_unique<GeneticAGE_MDDSolver>(s, c.second, 50, 0.1);
-                GeneticAGE_MDDSolver* position = (GeneticAGE_MDDSolver*)solver.get();
-                position->set_crossover_method(position->crossover_position);
             }
             auto ini = std::chrono::high_resolution_clock::now();
             auto solution = solver->solve(c.second->num_elements_to_be_chosen());
