@@ -1,3 +1,8 @@
+/**
+ * Daniel Pedrosa Montes © 2022
+ * Expat (MIT) License.
+ */
+
 #include "MemeticMDDSolver.hpp"
 #include "GeneticMDD.hpp"
 #include "LocalSearchMDDSolver.hpp"
