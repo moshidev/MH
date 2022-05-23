@@ -10,7 +10,6 @@
 #include "MDDSolver.hpp"
 
 class LocalSearchMDDSolver : public MDDSolver {
-    void populate_randomly(MDDSolution& solution, std::set<MDDChart::index_t>& nonchosen, unsigned number_of_elements_to_be_chosen) noexcept;
     std::pair<MDDChart::index_t,unsigned> best_first_neighbour_from_index(MDDChart::index_t index, const MDDSolution& solution, const std::set<MDDChart::index_t>& nonchosen) const noexcept;
 
 public:

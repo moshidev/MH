@@ -11,14 +11,6 @@ LocalSearchMDDSolver::LocalSearchMDDSolver(unsigned seed, const std::shared_ptr<
 :MDDSolver{seed, chart}
 {   }
 
-void LocalSearchMDDSolver::populate_randomly(MDDSolution& solution, std::set<MDDChart::index_t>& nonchosen, unsigned number_of_elements_to_be_chosen) noexcept {
-    for (unsigned i = 0; i < number_of_elements_to_be_chosen; i++) {
-        MDDChart::index_t selected = choose_random(nonchosen);
-        nonchosen.erase(selected);
-        solution.add_index_to_solution(selected);
-    }
-}
-
 std::pair<MDDChart::index_t,unsigned> LocalSearchMDDSolver::best_first_neighbour_from_index(MDDChart::index_t index, const MDDSolution& solution, const std::set<MDDChart::index_t>& nonchosen) const noexcept {
     typedef MDDSolution::sum_to_other_indexes_in_solution_t sum_t;
     typedef MDDSolution::index_t index_t;

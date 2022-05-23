@@ -31,6 +31,14 @@ unsigned MDDSolver::choose_random(const std::set<MDDSolution::index_t>& s) noexc
     return *it;
 }
 
+void MDDSolver::populate_randomly(MDDSolution& solution, std::set<MDDChart::index_t>& nonchosen, unsigned number_of_elements_to_be_chosen) noexcept {
+    for (unsigned i = 0; i < number_of_elements_to_be_chosen; i++) {
+        MDDChart::index_t selected = choose_random(nonchosen);
+        nonchosen.erase(selected);
+        solution.add_index_to_solution(selected);
+    }
+}
+
 int MDDSolver::random_int(int i, int s) noexcept {
     std::uniform_int_distribution<int> distribution{i, s};
     return distribution(rgenerator);
