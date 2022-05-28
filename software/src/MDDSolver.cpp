@@ -39,6 +39,15 @@ void MDDSolver::populate_randomly(MDDSolution& solution, std::set<MDDChart::inde
     }
 }
 
+MDDSolution MDDSolver::generate_random_solution(unsigned number_of_elements_to_be_chosen) {
+	MDDSolution random_solution{chart};
+	std::set<MDDSolution::index_t> nonchosen;
+	init_nonchosen(nonchosen);
+	populate_randomly(random_solution, nonchosen, number_of_elements_to_be_chosen);
+	
+	return random_solution;
+}
+
 int MDDSolver::random_int(int i, int s) noexcept {
     std::uniform_int_distribution<int> distribution{i, s};
     return distribution(rgenerator);

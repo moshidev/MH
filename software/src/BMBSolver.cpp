@@ -10,15 +10,6 @@ BMBSolver::BMBSolver(unsigned seed, const std::shared_ptr<const MDDChart>& c, un
 :MDDSolver{seed, c}, ls_solver{seed, c}, num_searches{num_searches}, evals_per_search{evals_per_search}
 {	}
 
-MDDSolution BMBSolver::generate_random_solution(unsigned number_of_elements_to_be_chosen) {
-	MDDSolution random_solution{chart};
-	std::set<MDDSolution::index_t> nonchosen;
-	init_nonchosen(nonchosen);
-	MDDSolver::populate_randomly(random_solution, nonchosen, number_of_elements_to_be_chosen);
-	
-	return random_solution;
-}
-
 MDDSolution BMBSolver::solve(unsigned number_of_elements_to_be_chosen) noexcept {
 	std::set<MDDSolution> solutions;
 

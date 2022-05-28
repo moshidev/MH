@@ -16,8 +16,6 @@ class BMBSolver : public MDDSolver {
 	unsigned num_searches;
 	unsigned evals_per_search;
 
-	MDDSolution generate_random_solution(unsigned number_of_elements_to_be_chosen);
-
 public:
 	BMBSolver() = delete;
     BMBSolver(const BMBSolver& g) = delete;

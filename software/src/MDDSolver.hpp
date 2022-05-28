@@ -27,6 +27,7 @@ protected:
     void init_nonchosen(std::set<MDDSolution::index_t>& nonchosen, const MDDSolution& sol) const noexcept;
     unsigned choose_random(const std::set<MDDSolution::index_t>& s) noexcept;
     void populate_randomly(MDDSolution& solution, std::set<MDDChart::index_t>& nonchosen, unsigned number_of_elements_to_be_chosen) noexcept;
+    MDDSolution generate_random_solution(unsigned number_of_elements_to_be_chosen);
     int random_int(int i, int s) noexcept;
 
 public:
