@@ -41,9 +41,8 @@ std::pair<MDDSolution,unsigned> LocalSearchMDDSolver::local_search(const MDDSolu
     sum_t best_dispersion = solution.calc_dispersion();
     sum_t dispersion = std::numeric_limits<sum_t>::max();
 
-    int i = 0;
     int num_neighbour_evals = 0;
-    while (best_dispersion < dispersion && i < 100'000 && num_neighbour_evals < max_num_of_neighbour_evals) {
+    while (best_dispersion < dispersion && num_neighbour_evals < max_num_of_neighbour_evals) {
         MDDSolution s_tmp{solution};
         dispersion = best_dispersion;
         for (const auto& a : s_tmp.get_solution()) {
@@ -58,10 +57,9 @@ std::pair<MDDSolution,unsigned> LocalSearchMDDSolver::local_search(const MDDSolu
                 best_dispersion = solution.calc_dispersion();
             }
         }
-        i++;
     }
 
-    return {solution,i};
+    return {solution,num_neighbour_evals};
 }
 
 MDDSolution LocalSearchMDDSolver::solve(unsigned number_of_elements_to_be_chosen) noexcept {
@@ -69,5 +67,5 @@ MDDSolution LocalSearchMDDSolver::solve(unsigned number_of_elements_to_be_chosen
     std::set<MDDChart::index_t> nonchosen;
     init_nonchosen(nonchosen);
     populate_randomly(solution_ini, nonchosen, number_of_elements_to_be_chosen);
-    return local_search(solution_ini, number_of_elements_to_be_chosen, std::numeric_limits<unsigned>::max()).first;
+    return local_search(solution_ini, number_of_elements_to_be_chosen, 100'000).first;
 }
