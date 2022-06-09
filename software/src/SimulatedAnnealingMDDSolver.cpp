@@ -34,8 +34,8 @@ MDDSolution SimulatedAnnealingMDDSolver::make_random_neighbour_from_solution(con
 
 bool SimulatedAnnealingMDDSolver::random_acceptance(float delta_f, float temperature) noexcept {
     std::uniform_real_distribution<float> rand_dist_zero_to_one(0.0, 1.0);
-    volatile float divisor = boltzmann_constant*temperature;
-    volatile float exp = 1/std::exp(delta_f/divisor);
+    float divisor = boltzmann_constant*temperature;
+    float exp = 1/std::exp(delta_f/divisor);
     return rand_dist_zero_to_one(rgen) < exp;
 }
 
@@ -59,7 +59,7 @@ MDDSolution SimulatedAnnealingMDDSolver::solve(unsigned number_of_elements_to_be
         while (neighbours_generated < max_num_neighbours && neighbours_accepted < max_num_successes) {
             MDDSolution random_neighbour {make_random_neighbour_from_solution(solution)};
             num_eval++; neighbours_generated++;
-            volatile int delta_f = random_neighbour.calc_dispersion() - (int)solution.calc_dispersion();
+            int delta_f = random_neighbour.calc_dispersion() - (int)solution.calc_dispersion();
             if (delta_f < 0 || random_acceptance(delta_f, temperature)) {
                 neighbours_accepted++;
                 solution = random_neighbour;
