@@ -20,6 +20,7 @@
 #include "MemeticMDDSolver.hpp"
 #include "BMBSolver.hpp"
 #include "ILSSolver.hpp"
+#include "SimulatedAnnealingMDDSolver.hpp"
 
 template<typename _T>
 static std::vector<_T> read_list(std::string str, char delimiter);
@@ -38,7 +39,7 @@ int main(int argn, char** argv) {
 
     std::string tipo_algoritmo{argv[1]};
     std::transform(tipo_algoritmo.begin(), tipo_algoritmo.end(), tipo_algoritmo.begin(), [](char c){ return std::tolower(c); });
-    if (tipo_algoritmo != "greedy" && tipo_algoritmo != "localsearch" && tipo_algoritmo != "genetic_agg_uniform" && tipo_algoritmo != "genetic_agg_position" && tipo_algoritmo != "genetic_age_uniform" && tipo_algoritmo != "genetic_age_position" && tipo_algoritmo != "memetic_10_1.0" && tipo_algoritmo != "memetic_10_0.1" && tipo_algoritmo != "memetic_10_0.1best" && tipo_algoritmo != "bmb" && tipo_algoritmo != "ils") {
+    if (tipo_algoritmo != "greedy" && tipo_algoritmo != "localsearch" && tipo_algoritmo != "genetic_agg_uniform" && tipo_algoritmo != "genetic_agg_position" && tipo_algoritmo != "genetic_age_uniform" && tipo_algoritmo != "genetic_age_position" && tipo_algoritmo != "memetic_10_1.0" && tipo_algoritmo != "memetic_10_0.1" && tipo_algoritmo != "memetic_10_0.1best" && tipo_algoritmo != "bmb" && tipo_algoritmo != "ils" && tipo_algoritmo != "simulated_annealing") {
         std::cerr << "Tipo de algoritmo desconocido." << std::endl;
         return 1;
     }
@@ -96,6 +97,10 @@ int main(int argn, char** argv) {
             }
             else if (tipo_algoritmo == "ils") {
                 solver = std::make_unique<ILSSolver>(s, c.second, 10, 10'000, 0.3);
+            }
+            else if (tipo_algoritmo == "simulated_annealing") {
+                unsigned n = c.second->num_elements();
+                solver = std::make_unique<SimulatedAnnealingMDDSolver>(s, c.second, 100'000, 10*n, 0.1*n, 10E-3);
             }
             auto ini = std::chrono::high_resolution_clock::now();
             auto solution = solver->solve(c.second->num_elements_to_be_chosen());

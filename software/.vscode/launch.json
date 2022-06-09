@@ -67,6 +67,23 @@
             "externalConsole": false,
             "MIMode": "lldb",
             "preLaunchTask": "Build"
+        },
+        {
+            "name": "(lldb) Simulated Annealing",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/bin/main_exe",
+            "args": [
+                "simulated_annealing",
+                "15",
+                "data/GKD-b_50_n150_m45.txt"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "lldb",
+            "preLaunchTask": "Build"
         }
     ]
 }
