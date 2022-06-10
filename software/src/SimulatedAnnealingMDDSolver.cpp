@@ -39,20 +39,16 @@ bool SimulatedAnnealingMDDSolver::random_acceptance(float delta_f, float tempera
     return rand_dist_zero_to_one(rgen) < exp;
 }
 
-MDDSolution SimulatedAnnealingMDDSolver::solve(unsigned number_of_elements_to_be_chosen) noexcept {
-    MDDSolution solution{chart};
-    std::set<MDDSolution::index_t> nonchosen;
-    init_nonchosen(nonchosen);
-    populate_randomly(solution, nonchosen, number_of_elements_to_be_chosen);
-    
+std::pair<MDDSolution,unsigned> SimulatedAnnealingMDDSolver::simulated_annealing(const MDDSolution& ini, unsigned number_of_elements_to_be_chosen) noexcept {
+    MDDSolution solution{ini};
+    MDDSolution best_solution{solution};
     float initial_temperature = calc_initial_temp(0.3, solution.calc_dispersion(), 0.3);
     float temperature = initial_temperature;
-    MDDSolution best_solution{solution};
     
     unsigned total_num_coolings_we_will_be_doing = max_num_eval/max_num_neighbours;
     unsigned num_eval = 0;
     unsigned num_improvements = 1;
-    while (temperature > final_temp && num_eval < max_num_eval) {// && num_improvements > 0) {
+    while (temperature > final_temp && num_eval < max_num_eval) {
         unsigned neighbours_generated = 0;
         unsigned neighbours_accepted = 0;
         num_improvements = 0;
@@ -74,5 +70,13 @@ MDDSolution SimulatedAnnealingMDDSolver::solve(unsigned number_of_elements_to_be
     }
 
 
-    return best_solution;
+    return {best_solution,num_eval};
+}
+
+MDDSolution SimulatedAnnealingMDDSolver::solve(unsigned number_of_elements_to_be_chosen) noexcept {
+    MDDSolution solution{chart};
+    std::set<MDDSolution::index_t> nonchosen;
+    init_nonchosen(nonchosen);
+    populate_randomly(solution, nonchosen, number_of_elements_to_be_chosen);
+    return simulated_annealing(solution, number_of_elements_to_be_chosen).first;
 }

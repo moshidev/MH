@@ -31,6 +31,8 @@ public:
     SimulatedAnnealingMDDSolver(SimulatedAnnealingMDDSolver&& g) = delete;
     SimulatedAnnealingMDDSolver(unsigned seed, const std::shared_ptr<const MDDChart>& c, unsigned max_num_eval, unsigned max_num_neighbours, unsigned max_num_successes, float final_temp);
 
+    std::pair<MDDSolution,unsigned> simulated_annealing(const MDDSolution& ini, unsigned number_of_elements_to_be_chosen) noexcept;
+
     [[nodiscard]] MDDSolution solve(unsigned number_of_elements_to_be_chosen) noexcept;
 };
 
