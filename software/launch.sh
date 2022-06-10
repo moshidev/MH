@@ -17,7 +17,7 @@ function echo_average_time() {
 
 files=$(ls data | sed 's/^/data\//' | sort -V | tr '\n' ',')
 files_wspaces=$(echo $files | tr ',' ' ')
-algorithms="greedy localsearch genetic_agg_uniform genetic_agg_posicion genetic_age_uniform genetic_age_posicion memetic_10_1.0 memetic_10_0.1.dat memetic_10_0.1best.dat"
+#algorithms="greedy localsearch genetic_agg_uniform genetic_agg_posicion genetic_age_uniform genetic_age_posicion memetic_10_1.0 memetic_10_0.1.dat memetic_10_0.1best.dat"
 seeds=1,2,3,4,5
 
 for a in $algorithms
@@ -49,3 +49,8 @@ done
 #bin/main_exe memetic_10_0.1best 1 "$files" > resultados_memetic_10_0.1best.dat
 #bin/main_exe memetic_10_0.1 1 "$files" > resultados_memetic_10_0.1.dat &
 #bin/main_exe memetic_10_1.0 1 "$files" > resultados_memetic_10_1.0.dat
+
+bin/main_exe simulated_annealing 2 "$files" > resultados_simulated_annealing.dat
+bin/main_exe bmb 2 "$files" > resultados_bmb.dat
+bin/main_exe ils 2 "$files" > resultados_ils.dat
+bin/main_exe ils_es 2 "$files" > resultados_ils_es.dat
