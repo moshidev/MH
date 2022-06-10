@@ -28,9 +28,10 @@ MDDSolution ILS_ESSolver::solve(unsigned number_of_elements_to_be_chosen) noexce
 		best_solution = es_solver.simulated_annealing(best_solution, number_of_elements_to_be_chosen).first;
 	}
 	for (int i = 0; i < num_searches-1; i++) {
-		mutate(best_solution, mutation_probability);
-		MDDSolution es_solution{es_solver.simulated_annealing(best_solution, number_of_elements_to_be_chosen).first};
-		if (es_solution < best_solution) {
+		MDDSolution mutated{best_solution};
+		mutate(mutated, mutation_probability);
+		MDDSolution es_solution{es_solver.simulated_annealing(mutated, number_of_elements_to_be_chosen).first};
+		if (es_solution.calc_dispersion() < best_solution.calc_dispersion()) {
 			best_solution = es_solution;
 		}
 	}

@@ -34,8 +34,9 @@ MDDSolution ILSSolver::solve(unsigned number_of_elements_to_be_chosen) noexcept 
 		best_solution = ls_solver.local_search(best_solution, number_of_elements_to_be_chosen, evals_per_search).first;
 	}
 	for (int i = 0; i < num_searches-1; i++) {
-		mutate(best_solution, mutation_probability);
-		MDDSolution ls_solution{ls_solver.local_search(best_solution, number_of_elements_to_be_chosen, evals_per_search).first};
+		MDDSolution mutated{best_solution};
+		mutate(mutated, mutation_probability);
+		MDDSolution ls_solution{ls_solver.local_search(mutated, number_of_elements_to_be_chosen, evals_per_search).first};
 		if (ls_solution < best_solution) {
 			best_solution = ls_solution;
 		}
