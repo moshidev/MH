@@ -23,7 +23,7 @@ protected:
     float cauchy_annealing_policy(float initial_temperature, float last_temperature, unsigned total_num_coolings_we_will_be_doing) const noexcept;
     float calc_initial_temp(float micro, float initial_sol_cost, float fi) const noexcept;
     MDDSolution make_random_neighbour_from_solution(const MDDSolution& s) noexcept;
-    bool random_acceptance(float delta_f, float temperature) noexcept;
+    bool probabilistic_acceptance(float delta_f, float temperature) noexcept;
 
 public:
     SimulatedAnnealingMDDSolver() = delete;

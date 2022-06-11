@@ -11,9 +11,9 @@ SimulatedAnnealingMDDSolver::SimulatedAnnealingMDDSolver(unsigned seed, const st
 :MDDSolver{seed, c}, rgen{seed}, max_num_eval{max_num_eval}, max_num_neighbours{max_num_neighbours}, max_num_successes{max_num_successes}, final_temp{final_temp}
 {   }
 
-float SimulatedAnnealingMDDSolver::cauchy_annealing_policy(float initial_temperature, float last_temperature, unsigned total_num_coolings_we_will_be_doing) const noexcept {
+float SimulatedAnnealingMDDSolver::cauchy_annealing_policy(float initial_temperature, float temperature, unsigned total_num_coolings_we_will_be_doing) const noexcept {
     float beta = (initial_temperature - final_temp)/(total_num_coolings_we_will_be_doing*initial_temperature*final_temp);
-    return last_temperature/(1 + beta*last_temperature);
+    return temperature/(1 + beta*temperature);
 }
 
 float SimulatedAnnealingMDDSolver::calc_initial_temp(float micro, float initial_sol_cost, float fi) const noexcept {
@@ -32,11 +32,11 @@ MDDSolution SimulatedAnnealingMDDSolver::make_random_neighbour_from_solution(con
     return random_neighbour;
 }
 
-bool SimulatedAnnealingMDDSolver::random_acceptance(float delta_f, float temperature) noexcept {
+bool SimulatedAnnealingMDDSolver::probabilistic_acceptance(float delta_f, float temperature) noexcept {
     std::uniform_real_distribution<float> rand_dist_zero_to_one(0.0, 1.0);
     float divisor = boltzmann_constant*temperature;
-    float exp = 1/std::exp(delta_f/divisor);
-    return rand_dist_zero_to_one(rgen) < exp;
+    float probability = 1/std::exp(delta_f/divisor);
+    return rand_dist_zero_to_one(rgen) < probability;
 }
 
 std::pair<MDDSolution,unsigned> SimulatedAnnealingMDDSolver::simulated_annealing(const MDDSolution& ini, unsigned number_of_elements_to_be_chosen) noexcept {
@@ -56,7 +56,7 @@ std::pair<MDDSolution,unsigned> SimulatedAnnealingMDDSolver::simulated_annealing
             MDDSolution random_neighbour {make_random_neighbour_from_solution(solution)};
             num_eval++; neighbours_generated++;
             int delta_f = random_neighbour.calc_dispersion() - (int)solution.calc_dispersion();
-            if (delta_f < 0 || random_acceptance(delta_f, temperature)) {
+            if (delta_f < 0 || probabilistic_acceptance(delta_f, temperature)) {
                 neighbours_accepted++;
                 solution = random_neighbour;
                 if (solution.calc_dispersion() < best_solution.calc_dispersion()) {
