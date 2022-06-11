@@ -1,0 +1,133 @@
+Los algoritmos de búsqueda local
+pueden quedar atrapados en óptimos locales al nunca aceptar soluciones
+peores de entre sus vecinos. Los algoritmos de Enfriamiento Simulado intentan
+solventar este hecho de forma que aunque
+siguen siendo algoritmos basadas en trayectorias solucionan en parte
+este problema al aceptar vecinos potencialmente peores
+en base a una función probabilística que depende en lo peor que sea la solución y
+lo avanzado que nos encontremos en el proceso de la búsqueda.
+
+\begin{minipage}{\textwidth}
+
+	\section{Esquema del algoritmo implementado}
+
+	El esquema general que seguimos para el algoritmo es el siguiente. Más adelante definiremos las
+	funciones que invocamos pero que no definimos. En la implementación que adjuntamos a la memoria
+	hacemos uso de la factorización de soluciones. Viene descrita en el Capítulo 2.
+
+	\begin{lstlisting}[mathescape=true,caption={Esquema general de un algoritmo basado en el Enfriamiento Simulado.},captionpos=b]
+var numero_maximo_de_evaluaciones
+var numero_maximo_de_vecinos_explorados
+
+def enfriamiento_simulado(solucion_inicial, temperatura_final):
+	var solucion_actual = solucion_inicial
+	var mejor_solucion = solucion_inicial
+	var temperatura_inicial = calcula_temperatura_inicial(solucion_inicial)
+	var temperatura_actual = temperatura_inicial
+	var numero_de_enfriamientos_que_haremos =
+		numero_maximo_de_evaluaciones/numero_maximo_de_vecinos_explorados
+
+	mientras que temperatura_actual > temperatura_final y mientras que no superemos el numero maximo de evaluaciones en total:
+		mientras que no superemos el número de vecinos generados y aceptados en cada iteración:	# L(T)
+			var vecino_aleatorio = haz_vecino_aleatorio(solucion_actual)
+			$\Delta f$ = vecino_aleatorio.dispersion() - solucion_actual.dispersion()
+			# Si la solucion vecina es mejor o si la aceptamos segun la funcion de aceptacion_probabilistica
+			si $\Delta f$ < 0 o aceptacion_probabilistica($\Delta f$, temperatura_actual):
+			solucion_actual = vecino_aleatorio
+			si solucion_actual.dispersion() < mejor_solucion.dispersion():
+			mejor_solucion = solucion_actual
+	
+		temperatura_actual = politica_de_enfriamiento(temperatura_inicial, temperatura_actual, numero_de_enfriamientos_que_haremos)
+	
+	devuelve mejor_solucion
+	\end{lstlisting}
+\end{minipage}
+
+Al seguir siendo un algoritmo basado en trayectorias podemos observar cierta similitud con una búsqueda local.
+Escogemos un vecino (en nuestro caso aleatorio), comparamos este con la solución con la que estamos trabajando en este
+momento y si es peor que la que acabamos de generar la sustituimos por la buena, ó si según la función de aceptación
+probabilística queremos aceptar una solución un tanto peor para intentar descubrir un entorno mayor en el espacio de soluciones.
+También destacamos el control que aplicamos sobre el número de vecinos que generamos y que aceptamos, denotándolo por L(T).
+Lo explicaremos más adelante.
+
+\begin{minipage}{\textwidth}
+	\subsection{Cálculo de la temperatura inicial}
+	
+	Calculamos la temperatura inicial según la siguiente fórmula que se nos da en el guión de la práctica \cite{GuionPracticas3MH}.
+	La implementamos en la definición de la función \texttt{calcula\_temperatura\_inicial(solucion\_inicial)}.
+
+	$$ T_0 = \frac{\mu \cdot C(S_0)}{-ln(\varphi )} $$
+
+	Tomando $\mu = \varphi = 0.3$ y $C(S_0)$ como el coste de nuestra solución inicial, tal y como se indica en el guión.
+\end{minipage}
+
+\begin{minipage}{\textwidth}
+	\subsection{Velocidad del enfriamiento L(T)}
+
+	En cada iteración del algoritmo guardamos constancia del número de vecinos que hemos generado, en este caso aleatoriamente,
+	y del número de vecinos que hemos aceptado, ya sea por tener un coste menor o por la función de aceptación probabilística que
+	explicamos y definimos más adelante.
+
+	En nuestro caso, según cómo se indica en el guión de prácticas \cite{GuionPracticas3MH}, el número máximo de vecinos generados
+	será igual a $10\cdot n$, siendo $n$ el tamaño del caso del problema, y el número máximo de soluciones aceptadas igual a
+	$0.1\cdot m$, con $m$ el número máximo de vecinos generados.
+\end{minipage}
+
+\begin{minipage}{\textwidth}
+	\subsection{Operador de mutación}
+	
+	Para generar un vecino aleatorio utilizamos el siguiente operador de mutación. Su propósito es el de eliminar un elemento aleatorio
+	de la solución por sustituirlo por otro elemento igualmente aleatorio.
+
+	\begin{lstlisting}[mathescape=true,caption={Operador de mutación para el algoritmo de Enfriamiento Simulado.},captionpos=b]
+	def haz_vecino_aleatorio(solucion):
+		var vecino_aleatorio = solucion
+
+		vecino_aleatorio.elimina_gen_aleatoriamente()
+		vecino_aleatorio.inserta_gen_aleatoriamente()
+
+		devuelve vecino_aleatorio
+	\end{lstlisting}
+\end{minipage}
+
+\begin{minipage}{\textwidth}
+	\subsection{Función de aceptación probabilística}
+
+	Según cómo definamos esta función tendremos mayor o menor probabilidad de aceptar una solución
+	peor a la que estemos evaluando actualmente en función de su diferencia entre costes y de la temperatura
+	actual. La función probabilística que propone Metrópolis(1953) para aceptar aumentos de temperatura
+	en el sistema viene dada por $\exp (\frac{-\delta E}{k\cdot T})$, siendo $\delta E$ el incremento en energía,
+	$k$ la constante de Boltzmann y $T$ la temperatura del sistema.\cite{Tema5MH} Aceptaremos o no una solución peor según la probabilidad
+	que nos devuelve esta ecuación.
+
+	\begin{lstlisting}[mathescape=true,caption={Función de aceptación probabilística para el algoritmo de Enfriamiento Simulado.},captionpos=b]
+	$k = 1.380649E-23$	# Constante de Boltzmann
+	var semilla
+	var rgen = generador_de_numeros_aleatorios(semilla)
+	
+	def aceptacion_probabilistica($\Delta f$, temperatura_actual):
+		var dist = distribucion uniforme de enteros en el rango $[0, 1]$
+		var probabilidad_aceptacion = $1 / exp (\Delta f / (k\cdot $temperatura_actual$))$
+		devuelve dist(rgen) < probabilidad_aceptacion
+	\end{lstlisting}
+
+	Comprobamos cómo si para obtener la probabilidad de aceptación utilizamos una ecuación
+	más sencilla como $1 / exp (\Delta f / (temperatura\_actual))$ obtenemos peores resultados.
+\end{minipage}
+
+\begin{minipage}{\textwidth}
+	\subsection{Política de enfriamiento}
+
+	Existen distintas políticas de enfriamiento que podemos aplicar.
+	Nosotros utilizaremos como política para la actualización de la temperatura actual en cada
+	iteración del algoritmo el esquema de Cauchy modificado. Este nos permitirá controlar el número de iteraciones
+	que realizará en total el algoritmo.
+
+	\begin{lstlisting}[mathescape=true,caption={Función que define la política de enfriamiento para el algoritmo de Enfriamiento Simulado.},captionpos=b]
+	def politica_de_enfriamiento(temperatura_inicial, temperatura_actual, numero_de_enfriamientos_que_haremos):
+		var dividendo = temperatura_inicial - temperatura_final
+		var divisor = numero_de_enfriamientos_que_haremos*temperatura_inicial*temperatura_actual
+		var beta = dividendo/divisor
+		devuelve temperatura_actual/(1 + beta*temperatura_actual)
+	\end{lstlisting}
+\end{minipage}
