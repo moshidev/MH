@@ -1,0 +1,55 @@
+Los algoritmos basados en búsqueda reiterada consisten en realizar
+una búsqueda por trayectorias como podría ser una búsqueda local
+o una búsqueda por enfriamiento simulado, aplicar un operador de mutación
+a la solución y seguir realizando búsquedas hasta que estimemos oportuno.
+
+\begin{minipage}{\textwidth}
+	\section{Esquema que utilizamos para implementar el ILS y el ILS-ES}
+
+	El esquema para el algortimo para realizar la Búsqueda Local Reiterada
+	y el híbrido entre ILS y Enfriamiento Simulado es el siguiente.
+	Determinamos un número máximo de evaluaciones por iteración y un número
+	máximo de iteraciones (búsquedas) que realizamos. Definimos más adelante
+	el operador de mutación que utilizamos.
+
+	\begin{lstlisting}[mathescape=true,caption={Esquema general de un algoritmo basado en Búsqueda Reiterada.
+						Según apliquemos Búsqueda Local o Enfriamiento Simulado definimos la función de búsqueda
+						tal y como describimos en sus respectivos capítulos.},captionpos=b]
+		var num_max_eval_por_busqueda
+		var probabilidad_de_mutacion
+
+		def busqueda_reiterada(numero_de_busquedas):
+			var mejor_solucion = genera_solucion_aleatoria_y_satisfacible()
+
+			si numero_de_busquedas > 0:
+				mejor_solucion = busqueda(mejor_solucion, num_max_eval_por_busqueda)
+			por cada busqueda que nos quede por hacer:
+				var solucion_mutada = muta(mejor_solucion, probabilidad_de_mutacion)
+				var solucion_busqueda = busqueda(solucion_mutada, num_max_eval_por_busqueda)
+				si solucion_busqueda es mejor que mejor_solucion:
+					mejor_solucion = solucion_busqueda
+			
+			devuelve mejor_solucion
+	\end{lstlisting}
+\end{minipage}
+
+\begin{minipage}{\textwidth}
+\section{Operador de mutación}
+
+Definimos como sigue el operador de mutación que utilizamos para el algoritmo de Búsqueda Reiterada
+de esta práctica. Consiste en, según la probabilidad de mutación, sustituir proporcionalmente un
+número de índices en la solución por otros completamente aleatorios.
+
+\begin{lstlisting}[mathescape=true,caption={Definición del operador de mutación para nuestra implementación del algoritmo de Búsqueda Reiterada. Recordemos que la inserción y eliminación de elementos en una solucion está factorizada, y su definición la podemos encontrar en el Capítulo en el que describimos la Arquitectura de una Solución.},captionpos=b]
+	def muta(a_mutar, probabilidad_de_mutacion):
+		var numero_de_mutaciones = a_mutar.num_genes() * probabilidad_de_mutacion # Esperanza matemática
+		var indices_escogidos = a_mutar.indices_genes()
+		var indices_sin_escoger = genes_chart() / indices_escogidos
+
+		por cada mutacion a realizar:
+			var a_quitar = escoge_aleatorio(indices_escogidos)
+			var a_insertar = escoge_aleatorio(indices_sin_escoger)
+			a_mutar.elimina_punto_de_solucion(a_quitar)
+			a_mutar.inserta_punto_en_solucion(a_insertar)
+\end{lstlisting}
+\end{minipage}
