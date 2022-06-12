@@ -1,3 +1,8 @@
+/**
+ * Daniel Pedrosa Montes © 2022
+ * Expat (MIT) License.
+ */
+
 #include "ILS_ESSolver.hpp"
 
 ILS_ESSolver::ILS_ESSolver(unsigned seed, const std::shared_ptr<const MDDChart>& c, unsigned num_searches, unsigned evals_per_search, float mutation_probability, unsigned max_num_neighbours, unsigned max_num_successes, float final_temp)
