@@ -8,42 +8,36 @@ Para el caso de los algoritmos genéticos, a diferencia de para los casos de los
 por cada fichero de benchmark la solución que nos proporcione el algoritmo en cuestión, para una única semilla. Procedemos
 de igual forma para el caso de los algoritmos meméticos.
 
-\section{Procedimiento para la obtención de resultados}
-
-Los resultados disponibles en los cuadros de esta sección han sido resultado de distintas ejecuciones.
-
-Para obtener la dispersión hemos ejecutado el algoritmo para cada dataset para 5 semillas distintas disponibles
-en el script lanzador. Cada fila de los cuadros 3 y 4 corresponde a la dispersión media de los 5 resultados de cada
-una de estas ejecuciones (para los algoritmos que corresponda)
-
-Por otra parte, para obtener el tiempo medio de ejecución para fila de las tablas hemos ejecutado cada dataset
-para 5 semillas unas 50 veces en invocaciones diferentes y obtenido la media de los resultados del tiempo de estas
-$ 50 \cdot 5 $ ejecuciones (para los algoritmos que corresponda)
-
-Por último hemos calculado la desviación media de las soluciones para cada tabla como la suma de las desviaciones
-entre el número de casos, símil para el caso del cálculo del tiempo medio. La desviación la hemos calculado como la
-diferencia entre el coste en dispersión de nuestro algoritmo y el coste de nuestra referencia.
+\begin{minipage}{\textwidth}
+    \section{Procedimiento para la obtención de resultados}
+    
+    Los resultados disponibles en los cuadros de esta sección han sido resultado de distintas ejecuciones.
+    
+    Para obtener la dispersión hemos ejecutado el algoritmo para cada dataset para 5 semillas distintas disponibles
+    en el script lanzador. Cada fila de los cuadros 3 y 4 corresponde a la dispersión media de los 5 resultados de cada
+    una de estas ejecuciones (para los algoritmos que corresponda)
+    
+    Por otra parte, para obtener el tiempo medio de ejecución para fila de las tablas hemos ejecutado cada dataset
+    para 5 semillas unas 50 veces en invocaciones diferentes y obtenido la media de los resultados del tiempo de estas
+    $ 50 \cdot 5 $ ejecuciones (para los algoritmos que corresponda)
+    
+    Por último hemos calculado la desviación media de las soluciones para cada tabla como la suma de las desviaciones
+    entre el número de casos, símil para el caso del cálculo del tiempo medio. La desviación la hemos calculado como la
+    diferencia entre el coste en dispersión de nuestro algoritmo y el coste de nuestra referencia.
+    
+\end{minipage}
 
 \input{resources/tabla_medias.tex}
 
 \section{Análisis de los datos obtenidos}
 
-En general, los resultados obtenidos son bastante mejorables si los comparamos con las dispersiones de referencia. Como hemos
-comentado anteriormente y volveremos a repetir, el factor que más influye en la obtención de resultados es la solución inicial,
-ya que al al explorar el espacio de soluciones casi que exclusivamente inmediatamente contiguo será fácil llegar a una solución
-la cual no tenga vecinos mejores, quedando por tanto atrapado en un óptimo local y ofreciendo costes muy diferentes según la semilla
-utilizada para el generador aleatorio.
+Una vez extraidos los datos observamos cómo los algoritmos que implementamos nos ofrecen
+soluciones sustancialmente diferentes según las semillas que empleamos, especialmente en
+aquellos en los que parten de una única solución generada aleatoriamente. Parece que existe
+cierta correlación entre una exploración más amplia del espacio de soluciones y
+la obtención de mejores resultados.
 
-Podemos observar estos hechos en la figura 6.1, especialemente en el caso de la Búsqueda Local por Primer Mejor Vecino y por Mejor Vecino.
-En general podemos observar que existen muchos resultados con dispersiones muy distintas por encima del tercer cuartil. También lo explicamos
-como consecuencia de los factores expuestos.
-
-Destaca el algoritmo de Búsqueda Local por Mejor Vecino por dar peores resultados realizando más iteraciones que el de por Primer
-Mejor Vecino, aunque con mejores resultados de media que el Greedy y con la mediana prácticamente idéntica al Búsqueda Local por Primer Mejor Vecino.
-Esto se debe a que aunque recorre más exhaustivamente el espacio de soluciones y la limitación operador de mutación seguido la BL por Mejor Vecino
-se quede atascado en un óptimo local sin haber explorado mucho el espacio de soluciones, al igual que le ocurre de forma parecida al algoritmo Greedy.
-
-\begin{figure}[ht]
+\begin{figure}[H]
     \centering
     \includegraphics[keepaspectratio,width=\textwidth]{box_and_whisker_dispersion_media_dataset_y_tipo_algoritmo.png}
     \caption{Dispersión media por dataset y por tipo de algoritmo. Podemos observar que hay una alta desviación típica del coste de las soluciones.
@@ -55,7 +49,16 @@ Para aumentar el espacio en el espacio de soluciones del conjunto de soluciones 
 así atrapados en óptimos locales utilizando estrategias de BL podríamos probar variantes como la Búsqueda Local Estocástica, Búsqueda Local por Primer Mejor Aleatorio, Búsqueda Local
 con Reinicio Aleatorio u otras técnicas más avanzadas como el Enfriamiento Simulado o búsqueda \textit{Local Beam} entre otros.\cite[Sección 4.1]{russell2020artificial}
 
-Otra opción es la de usar algoritmos genéticos. Podemos ver que ofrecen unos muy buenos resultados, gracias a que no sólo van saltando más por el espacio de soluciones
+Probamos con las técnicas Búsqueda Local con Reinicio Aleatorio y Búsqueda Reiterada por BL y ES.
+Podemos observar cómo, aun teniendo como base una búsqueda local, las soluciones obtenidas son significativamente mejores, observando de nuevo como destacábamos anteriormente
+correlación entre una mayor exploración del espacio de soluciones y mejores soluciones.
+Sin embargo esto no ocurre así para las ejecuciones del algoritmo de Enfriamiento Simulado. Podemos ver que ofrece soluciones un tanto mejores que una búsqueda local, pero bastante
+peores que estos. Haciendo pruebas vemos cómo la función de aceptación probabilística
+es significativamente determinante en los resultados finales obtenidos. Sospechamos que el no ofrecer mejores soluciones
+es causa del operador de mutación del algoritmo, que no produce soluciones suficientemente diversas. Sin embargo no tenemos certeza en la causalidad,
+sólo en los resultados obtenidos.
+
+Otra opción para aumentar el espacio es la de usar algoritmos genéticos. Podemos ver que ofrecen unos muy buenos resultados, gracias a que no sólo van saltando más por el espacio de soluciones
 sino que además van conservando las partes de las soluciones más prometedoras, alejándolos de una simple búsqueda aleatoria. Podemos ver cómo para el problema del MDD los modelos
 estacionarios dan mejores soluciones que los generacionales. Esto se puede deber a que los generacionales sustituyen completamente la población original, mientras que los estacionarios
 únicamente inserta las nuevas soluciones en la población inicial si estas son mejores, conservando más información acerca de las soluciones más prometedoras y no cayendo tanto en la aleatoriedad.
@@ -66,6 +69,14 @@ seguramente ayudará a obtener soluciones con mejor fitness.
 
 En nuestras ejecuciones los algoritmos meméticos, aunque mejores que una búsqueda local, dan peor rendimiento que el resto de algoritmos genéticos.
 En este, cuanto más peso le damos al paso genético y cuanto más fuerte sea el elitismo, da mejores resultados.
+
+\subsection{Conclusiones}
+
+En el problema del MDD, para nuestras implementaciones de los algoritmos de búsqueda por trayectorias y de búsqueda por
+poblaciones, comprobamos que los más efectivos son los genéticos AGE, meméticos, búsquedas reiteradas y búsquedas con
+reinicio aleatorio. Es decir, existe una correlación entre aquellos que combinan una exploración del espacio de soluciones
+más o menos amplio pero optimizando las soluciones por medio de búsquedas locales o parecidos y un mejor resultado en las
+soluciones que obtenemos. Obtenemos mejores medias que otros métodos, como el acercamiento greedy, búsquedas locales y genéticos AGG.
 
 \input{resources/tabla_ejecuciones_greedy.tex}
 \input{resources/tabla_ejecuciones_localsearchbestfirst.tex}
