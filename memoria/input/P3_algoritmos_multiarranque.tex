@@ -1,0 +1,25 @@
+Los métodos multiarranque buscan explorar el espacio de soluciones al
+realizar distintas búsquedas locales a partir de distintas soluciones
+generadas aleatoriamente, y así intentar disminuir las probabilidades
+de quedar en un óptimo local, o al menos terminar seleccionando el mejor
+óptimo local de entre las distintas búsquedas que se realicen.
+
+\section{Esquema de la Búsqueda Multiarranque Básica}
+
+Implementamos el siguiente esquema que depende en la búsqueda local
+que describimos en el Capítulo 2. Consiste en realizar $n$ búsquedas
+locales a partir de soluciones aleatorias, cada una de estas con un 
+máximo de evaluaciones, y quedarse con la mejor solución que obtengamos.
+
+\begin{lstlisting}[mathescape=true,caption={Esquema general de un algoritmo basada en Búsqueda Multiarranque Básica.},captionpos=b]
+	var num_max_eval_por_busqueda
+
+	def busqueda_multiarranque(numero_de_busquedas):
+		var soluciones
+
+		por cada búsqueda que queremos hacer:
+			solucion_aleatoria = genera_solucion_aleatoria_y_factible()
+			soluciones.inserta(busqueda_local(solucion_aleatoria, num_max_eval_por_busqueda))
+
+		devuelve devuelve_mejor(soluciones)
+\end{lstlisting}
