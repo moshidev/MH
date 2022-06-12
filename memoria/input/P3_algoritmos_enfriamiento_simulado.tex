@@ -33,9 +33,9 @@ def enfriamiento_simulado(solucion_inicial, temperatura_final):
 			$\Delta f$ = vecino_aleatorio.dispersion() - solucion_actual.dispersion()
 			# Si la solucion vecina es mejor o si la aceptamos segun la funcion de aceptacion_probabilistica
 			si $\Delta f$ < 0 o aceptacion_probabilistica($\Delta f$, temperatura_actual):
-			solucion_actual = vecino_aleatorio
-			si solucion_actual.dispersion() < mejor_solucion.dispersion():
-			mejor_solucion = solucion_actual
+				solucion_actual = vecino_aleatorio
+				si solucion_actual.dispersion() < mejor_solucion.dispersion():
+					mejor_solucion = solucion_actual
 	
 		temperatura_actual = politica_de_enfriamiento(temperatura_inicial, temperatura_actual, numero_de_enfriamientos_que_haremos)
 	
@@ -77,7 +77,7 @@ Lo explicaremos más adelante.
 	\subsection{Operador de mutación}
 	
 	Para generar un vecino aleatorio utilizamos el siguiente operador de mutación. Su propósito es el de eliminar un elemento aleatorio
-	de la solución por sustituirlo por otro elemento igualmente aleatorio.
+	de la solución y sustituirlo por otro elemento igualmente aleatorio.
 
 	\begin{lstlisting}[mathescape=true,caption={Operador de mutación para el algoritmo de Enfriamiento Simulado.},captionpos=b]
 	def haz_vecino_aleatorio(solucion):
